@@ -1,0 +1,5 @@
+syntax = "proto3";
+package monad;
+
+// For the messages that carry operational causality between consumers: direct influence
+// records, interventions and reliable records. No message is declared yet.

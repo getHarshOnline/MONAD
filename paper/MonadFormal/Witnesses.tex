@@ -1,0 +1,83 @@
+% Lean module: MonadFormal.Witnesses
+\section{Separating counterexamples}\label{sec:separating-witnesses}
+
+Several distinctions that look harmless in isolation fail when
+strengthened. The examples below separate pairwise from joint
+agreement, macro labels from implemented interventions, approximate
+closeness from equivalence, and reliable recording from thresholded
+detection.
+
+\begin{theorem}[Pairwise agreement does not determine the joint law]
+\label{thm:parity-marginals}
+Let $P$ be uniform on $\{000,011,101,110\}$ and $Q$ uniform on
+$\{001,010,100,111\}$. Every two-coordinate marginal agrees between
+$P$ and $Q$, but parity is always zero under $P$ and always one under $Q$.
+\end{theorem}
+\begin{proof}
+Each support contains four states. For every two distinct coordinates,
+each of $00,01,10,11$ appears exactly once in each support, giving
+probability $1/4$. Direct evaluation of exclusive-or gives zero on
+every member of the first support and one on every member of the second.
+\leanproof{MonadFormal.Witnesses.equal_support_sizes,MonadFormal.Witnesses.every_pair_marginal_equal,MonadFormal.Witnesses.opposite_joint_parity}
+\end{proof}
+Pairwise validation is therefore not joint validation. Resource admission
+is a separate issue even before statistical inference: three measurements
+of cost four have jointly inadmissible cost under budget ten although any
+pair is affordable.
+\begin{proof}
+The costs are $4+4=8\le10<12=4+4+4$.
+\leanproof{MonadFormal.Witnesses.pair_budget_not_joint_budget}
+\end{proof}
+
+\begin{theorem}[A macro intervention needs an implementation]
+\label{thm:macro-implementation}
+For microstates $(x_1,x_2)\in\mathbb N^2$, let
+$a(x_1,x_2)=x_1+x_2$ and $b(x_1,x_2)=x_1+2x_2$.
+Setting the macro value $a=1$ via $(1,0)$ yields $b=1$, whereas
+setting it via $(0,1)$ yields $b=2$. Consequently no deterministic
+response function $h$ satisfies $b=h\circ a$ on all microstates.
+\end{theorem}
+\begin{proof}
+Both microstates have $a=1$ and their $b$ values differ. A function
+of the macro value alone would assign the same $b$ value to both.
+\leanproof{MonadFormal.Witnesses.same_macro_input_different_output,MonadFormal.Witnesses.no_macro_response}
+\end{proof}
+This does not forbid a macro model with a specified implementation
+distribution or additional mechanism constraints. It shows why the macro
+label alone is insufficient to determine the intervention's response.
+
+\begin{lemma}[Binary total variation]\label{lem:binary-tv}
+For Bernoulli parameters $p,q\in[0,1]$, total variation is $|p-q|$.
+\end{lemma}
+\begin{proof}
+For a test $f:\{0,1\}\to[0,1]$, the expectation difference is
+$(p-q)(f(1)-f(0))$, whose absolute value is at most $|p-q|$.
+The indicator of one attains this bound. Equivalently, the two-atom
+expression $\frac12(|p-q|+|(1-p)-(1-q)|)$ has equal absolute-value terms.
+\leanproof{MonadFormal.Witnesses.bernoulli,MonadFormal.Witnesses.bernoulli_tv,MonadFormal.Witnesses.binary_total_variation}
+\end{proof}
+
+\begin{example}[Approximate closeness is not equivalence]
+\label{ex:approximate-nontransitivity}
+At total-variation tolerance $1/2$, Bernoulli parameters zero and $2/5$
+are close, as are $2/5$ and $4/5$, but zero and $4/5$ are not.
+\end{example}
+\begin{proof}
+The adjacent distances are $2/5$ and the endpoint distance is $4/5$.
+\leanproof{MonadFormal.Witnesses.approximate_closeness_not_transitive,MonadFormal.Witnesses.approximate_tv_not_transitive}
+\end{proof}
+Thus an approximate MONAD relation cannot automatically be quotiented
+as an equivalence relation.
+
+\begin{example}[Reliable but below the detection threshold]
+\label{ex:record-threshold}
+Suppose the two event-conditioned binary records have probabilities
+$4/5$ and $1/5$ of recording one. The identity decision rule has both
+error probabilities $1/5<1/2$. Nevertheless their total variation is
+$3/5$, below a declared detection threshold $9/10$.
+\end{example}
+\begin{proof}
+The power is $4/5=1-1/5$, the size is $1/5$, and
+$|4/5-1/5|=3/5<9/10$.
+\leanproof{MonadFormal.Witnesses.recordable_but_undetected}
+\end{proof}

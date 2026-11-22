@@ -1,0 +1,38 @@
+% Lean module: MonadFormal.Information.Testing.Hellinger.Variation
+\paragraph{Comparison with operational total variation.}
+
+\begin{theorem}[Density formula and Hellinger bounds]
+\label{thm:hellinger-tv}
+Let $\delta=d_{\mathrm{TV}}(P_r,P_s)$ use the normalized
+measurable-test distance of \Cref{sec:simulation}. Then
+\[
+ \delta=\frac12\int|r^2-s^2|\,d\mu,
+ \qquad
+ H^2(P_r,P_s)\le\delta,
+ \qquad
+ \delta^2\le H^2(P_r,P_s)\bigl(2-H^2(P_r,P_s)\bigr).
+\]
+The density formula is an equality with that operational distance,
+not an independent definition.
+\end{theorem}
+\begin{proof}
+Put $f=r^2-s^2$. It is integrable and $\int f\,d\mu=0$.
+For a measurable event $A$, its complement has the opposite signed
+integral. Applying the integral triangle inequality on both pieces gives
+$2|\int_A f\,d\mu|\le\int|f|\,d\mu$.
+Equality is attained by $A=\{f\ge0\}$, since the positive and negative
+parts have equal integral. The event characterization of total variation
+therefore proves the density formula.
+
+For nonnegative $r,s$, $(r-s)^2\le|r^2-s^2|$ pointwise, giving
+the lower bound. For the upper bound, factor the density difference
+and apply Cauchy--Schwarz:
+\[
+ \delta=\frac12\int|(r-s)(r+s)|\,d\mu
+ \le\frac12\|r-s\|_2\|r+s\|_2.
+\]
+Now $\|r-s\|_2^2=2H^2$ and
+$\|r+s\|_2^2=2+2\rho=4-2H^2$.
+Squaring the nonnegative bound proves the last inequality.
+\leanproof{MonadFormal.Information.abs_setIntegral_le_half_integral_abs,MonadFormal.Information.integral_abs_mul_le_L2_norm,MonadFormal.Information.RootDensity.density_diff_integrable,MonadFormal.Information.RootDensity.density_diff_integral,MonadFormal.Information.RootDensity.tv_eq_density_integral,MonadFormal.Information.RootDensity.tv_toReal_eq_density_integral,MonadFormal.Information.RootDensity.hellingerSq_le_tv,MonadFormal.Information.RootDensity.tv_sq_le_hellingerSq}
+\end{proof}

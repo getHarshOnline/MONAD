@@ -1,0 +1,20 @@
+% Lean module: MonadFormal.Counterexample
+\subsubsection{Revelation without a new carrier}
+
+\begin{example}[An old bit becomes relevant]\label{ex:old-bit}
+Take $X=\{0,1\}$ and initially admit no probes. The constant map
+$q:X\to\{*\}$ is sufficient. Add the identity probe on the same
+carrier. The old class splits, and $q$ is no longer sufficient.
+Every representation sufficient for the identity probe is injective.
+\end{example}
+\begin{proof}
+The empty family imposes no equalities. After extension, the identity
+probe returns zero on one state and one on the other. Any decoder of
+the constant value would have to return both, which is impossible.
+The identity probe jointly separates the carrier, so the final claim
+is the universal compression obstruction.
+\leanproof{MonadFormal.base_indist,MonadFormal.extended_split,MonadFormal.const_sufficient_before,MonadFormal.const_insufficient_after,MonadFormal.idFamily_separating,MonadFormal.no_go_on_bool}
+\end{proof}
+Non-factorization establishes insufficiency relative to the changed
+family. It does not establish that a new physical degree of freedom,
+language or carrier element came into existence.

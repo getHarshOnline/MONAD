@@ -1,0 +1,15 @@
+% Lean module: MonadFormal.Monotonicity
+\subsubsection{Continuation monotonicity}\label{ss:monotonicity}
+
+\begin{theorem}[Refinement under family growth]\label{thm:family-growth}
+Let $F$ and $G$ be probe families on the same carrier. If $x$ and
+$y$ agree on every probe in $F\cup G$, they agree on every probe
+in $F$. Thus enlarging a continuation-probe family can only refine
+its observational equivalence.
+\end{theorem}
+\begin{proof}
+Each probe of $F$ is a member of the enlarged family. Restrict its
+universal equality condition to those members. The formal family uses
+a disjoint union of indices; duplicate probes do not change the relation.
+\leanproof{MonadFormal.indist_mono}
+\end{proof}

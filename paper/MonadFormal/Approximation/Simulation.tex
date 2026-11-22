@@ -1,0 +1,100 @@
+% Lean module: MonadFormal.Approximation.Simulation
+\subsection{Uniform decision transfer and composition}
+
+An experiment is a family $E=(E_\theta)_{\theta\in\Theta}$ of
+probability measures on a common sample space. Let $E,F,G$ have sample
+spaces $X,Y,Z$, respectively, and the same parameter set $\Theta$.
+Define the uniform simulation error and directed deficiency by
+\[
+ e(K;E,F)=\sup_{\theta\in\Theta}
+   d_{\mathrm{TV}}(KE_\theta,F_\theta),\qquad
+ \delta_{\mathrm{sim}}(E,F)=\inf_{K:X\rightsquigarrow Y} e(K;E,F).
+\]
+The infimum is over one common kernel, independent of $\theta$.
+The direction $E\to F$ means that data from $E$ are used to simulate
+$F$. This is Markov-kernel deficiency; no identification with more
+general abstract transitions is assumed. The formal definitions use
+extended nonnegative reals, with empty infimum $\infty$ and empty
+supremum zero. Nonempty sample spaces ensure a constant randomization
+exists, so the deficiencies used here are finite.
+\leandef{MonadFormal.Approximation.Experiment,MonadFormal.Approximation.simulationError,MonadFormal.Approximation.deficiency}
+
+\begin{lemma}[Normalization and exact simulation]
+$0\le\delta_{\mathrm{sim}}(E,F)\le1$. If a common kernel satisfies
+$KE_\theta=F_\theta$ for every $\theta$, then
+$\delta_{\mathrm{sim}}(E,F)=0$. In particular,
+$\delta_{\mathrm{sim}}(E,E)=0$.
+\end{lemma}
+\begin{proof}
+Every kernel's error is at most one. The infimum is bounded above by
+the error of a constant probability kernel and is nonnegative.
+An exact simulator has zero error, so its deficiency is zero. Use the
+identity kernel for the diagonal case.
+\leanproof{MonadFormal.Approximation.simulationError_le_one,MonadFormal.Approximation.deficiency_le_simulationError,MonadFormal.Approximation.deficiency_le_one,MonadFormal.Approximation.deficiency_of_exact,MonadFormal.Approximation.deficiency_self}
+\end{proof}
+
+Let $D:Y\rightsquigarrow A$ be a randomized decision rule and let
+$\ell_\theta:A\to[0,1]$ be measurable for each $\theta$. Its risk is
+\[
+ R_F(D,\ell;\theta)=\int_A\ell_\theta(a)\,(DF_\theta)(da).
+\]
+\leandef{MonadFormal.Approximation.risk}
+
+\begin{theorem}[Bounded-risk transfer]\label{thm:risk-transfer}
+Every simulator $K$ satisfies, uniformly over decisions, bounded losses
+and parameters,
+\[
+ |R_E(DK,\ell;\theta)-R_F(D,\ell;\theta)|\le e(K;E,F).
+\]
+Consequently, for every $\varepsilon>0$ a common simulator can be chosen
+so that, for all $D,\ell,\theta$,
+\[
+ |R_E(DK,\ell;\theta)-R_F(D,\ell;\theta)|
+ <\delta_{\mathrm{sim}}(E,F)+\varepsilon.
+\]
+\end{theorem}
+\begin{proof}
+The loss is an admitted test on $A$. Its expectation difference is
+bounded by the total variation between $DKE_\theta$ and $DF_\theta$.
+Markov contraction bounds this by
+$d_{\mathrm{TV}}(KE_\theta,F_\theta)\le e(K;E,F)$.
+Choose $K$ with error below
+$\delta_{\mathrm{sim}}(E,F)+\varepsilon$ by the defining infimum.
+This choice uses the simulation error, before the loss, decision rule
+or parameter is selected. No minimizing kernel is assumed to exist.
+\leanproof{MonadFormal.Approximation.pointwise_le_simulationError,MonadFormal.Approximation.risk_transfer,MonadFormal.Approximation.risk_transfer_real,MonadFormal.Approximation.deficiency_risk_transfer,MonadFormal.Approximation.deficiency_risk_transfer_epsilon}
+\end{proof}
+
+\begin{theorem}[Composition of simulation errors]
+\label{thm:simulation-composition}
+For common kernels $K:X\rightsquigarrow Y$ and $L:Y\rightsquigarrow Z$,
+\[
+ e(LK;E,G)\le e(K;E,F)+e(L;F,G),
+ \qquad
+ \delta_{\mathrm{sim}}(E,G)
+ \le\delta_{\mathrm{sim}}(E,F)+\delta_{\mathrm{sim}}(F,G).
+\]
+\end{theorem}
+\begin{proof}
+At each parameter, insert $LF_\theta$ as an intermediate measure:
+\begin{align*}
+ d_{\mathrm{TV}}(LKE_\theta,G_\theta)
+ &\le d_{\mathrm{TV}}(LKE_\theta,LF_\theta)
+       +d_{\mathrm{TV}}(LF_\theta,G_\theta)\\
+ &\le d_{\mathrm{TV}}(KE_\theta,F_\theta)
+       +d_{\mathrm{TV}}(LF_\theta,G_\theta).
+\end{align*}
+Take the supremum over $\theta$. The composite kernel is a candidate
+for $\delta_{\mathrm{sim}}(E,G)$. Taking independent infima over $K$
+and $L$ gives the deficiency bound; addition preserves these infima
+in the extended nonnegative reals. Attainment is unnecessary.
+\leanproof{MonadFormal.Approximation.simulationError_comp,MonadFormal.Approximation.deficiency_triangle}
+\end{proof}
+
+These are forward guarantees, not a proof of the converse randomization
+theorem. No unbounded-loss, computational-cost, recovery, or causal
+intervention guarantee follows without its own hypotheses. A restricted
+class of implementable simulators needs explicit access and resource
+rules, including closure and cost under composition. Small pairwise
+error also does not supply an equivalence relation; see the exact
+nontransitivity witness in the next section.

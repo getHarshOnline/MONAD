@@ -1,0 +1,59 @@
+% Lean module: MonadFormal.Information.Testing.Hellinger
+\subsubsection{Square-root density geometry}
+\label{sec:hellinger-geometry}
+
+Fix a measure $\mu$ on an arbitrary measurable space $X$.
+A square-root density is an element $r\in L^2(\mu;\mathbb R)$ with
+$r\ge0$ almost everywhere and $\|r\|_2=1$. It represents the
+probability law $P_r=r^2\mu$. Representatives differing on a
+$\mu$-null set describe the same $L^2$ element.
+\leandef{MonadFormal.Information.RootDensity,MonadFormal.Information.RootDensity.law}
+
+\begin{lemma}[Probability-law representation]
+\label{lem:root-law}
+For each measurable $A$,
+\[
+ P_r(A)=\int_A r^2\,d\mu,\qquad P_r(X)=1.
+\]
+The map $r\mapsto P_r$ is injective on square-root densities.
+\end{lemma}
+\begin{proof}
+The $L^2$ inner-product identity gives $\int r^2\,d\mu=\|r\|_2^2=1$,
+so weighting $\mu$ by $r^2$ defines a probability measure.
+If $P_r=P_s$, uniqueness of integrable densities gives $r^2=s^2$
+almost everywhere. Nonnegativity then gives $r=s$ almost everywhere,
+hence equality in $L^2$.
+\leanproof{MonadFormal.Information.integral_sq_L2,MonadFormal.Information.RootDensity.ext,MonadFormal.Information.RootDensity.integral_sq,MonadFormal.Information.RootDensity.law_real_apply,MonadFormal.Information.RootDensity.law_injective}
+\end{proof}
+
+For two such roots over the same reference measure, define their
+affinity and squared Hellinger distance by
+\[
+ \rho(r,s)=\langle r,s\rangle_{L^2},\qquad
+ H^2(P_r,P_s)=\frac12\|r-s\|_2^2.
+\]
+This is the normalization with $0\le H^2\le1$, not the alternative
+convention that omits the factor $1/2$.
+\leandef{MonadFormal.Information.RootDensity.affinity,MonadFormal.Information.RootDensity.hellingerSq}
+
+\begin{proposition}[Affinity identity and separation]
+\label{prop:hellinger-affinity}
+\[
+ H^2(P_r,P_s)=\frac12\int(r-s)^2\,d\mu
+ =1-\int rs\,d\mu=1-\rho(r,s).
+\]
+Moreover $0\le\rho(r,s)\le1$, $0\le H^2(P_r,P_s)\le1$, and
+$H^2(P_r,P_s)=0$ if and only if $P_r=P_s$.
+\end{proposition}
+\begin{proof}
+The inner product in $L^2$ is the integral of the product.
+Expand $\|r-s\|_2^2=\|r\|_2^2-2\langle r,s\rangle+\|s\|_2^2$.
+Nonnegativity of the roots gives $\rho\ge0$, and Cauchy--Schwarz gives
+$\rho\le\|r\|_2\|s\|_2=1$. The norm vanishes precisely when
+$r=s$ in $L^2$; apply \Cref{lem:root-law} for the equivalence with
+equality of probability laws.
+\leanproof{MonadFormal.Information.RootDensity.affinity_eq_integral,MonadFormal.Information.RootDensity.affinity_nonneg,MonadFormal.Information.RootDensity.affinity_le_one,MonadFormal.Information.RootDensity.hellingerSq_eq_one_sub_affinity,MonadFormal.Information.RootDensity.hellingerSq_bounds,MonadFormal.Information.RootDensity.hellingerSq_eq_integral,MonadFormal.Information.RootDensity.hellingerSq_eq_zero_iff}
+\end{proof}
+
+\input{MonadFormal/Information/Testing/Hellinger/Variation}
+\input{MonadFormal/Information/Testing/Hellinger/Regularity}

@@ -1,0 +1,117 @@
+% Lean module: MonadFormal.Information.Input
+\subsection{Coarse-graining and constrained capacity}
+\label{sec:input-capacity}
+
+Let $q:X\to M$ be a measurable coarse-graining and
+$K:M\rightsquigarrow Y$ the record channel. A microstate input law
+$\mu$ induces the macrostate law $q_*\mu$. The distinction between
+these input alphabets matters even though the record is generated
+only from the macrostate.
+
+\begin{theorem}[Information under deterministic coarse-graining]
+\label{thm:input-information}
+For every input probability law $\mu$ on arbitrary measurable carriers,
+\[
+ I(\mu,K\circ q)=I(q_*\mu,K).
+\]
+\end{theorem}
+\begin{proof}
+The output law is $\nu=K(q_*\mu)=(K\circ q)\mu$.
+Apply \Cref{thm:input-relative-entropy} with $L(m,\cdot)=\nu$.
+Its reference laws are exactly the products of the corresponding
+input and output marginals.
+\leanproof{MonadFormal.Information.channelInfo_comap_eq}
+\end{proof}
+
+\begin{proposition}[Conditional-law reconstruction]
+\label{prop:input-disintegration}
+Suppose the law of $(q(X),X)$ admits a Markov disintegration
+\begin{equation}\label{eq:input-disintegration}
+ (q_*\mu)\otimes R=(q,\operatorname{id})_*\mu.
+\end{equation}
+Then processing the macrostate coordinate by $R$ reconstructs the
+microstate-record joint law:
+\[
+ (R\otimes K)(q_*\mu)=\mu\otimes(K\circ q).
+\]
+This gives an alternative proof of \Cref{thm:input-information}.
+A standard Borel microstate space is sufficient for the existence of $R$.
+\end{proposition}
+\begin{proof}
+To verify the identity on a measurable rectangle $A\times B$,
+integrate $\mathbf1_A(x)K(m,B)$ against the two sides of
+\eqref{eq:input-disintegration}:
+\[
+ \int R(m,A)K(m,B)\,d(q_*\mu)(m)
+ =\int_A K(q(x),B)\,d\mu(x).
+\]
+Measurable data processing under $(q,\operatorname{id})$ gives
+$I(q_*\mu,K)\le I(\mu,K\circ q)$; Markov processing by $R$ of the
+macrostate coordinate, leaving the record unchanged, gives the reverse
+inequality. On a standard
+Borel microstate space, disintegration of the graph law supplies $R$.
+\leanproof{MonadFormal.Information.reconstruct_input_joint,MonadFormal.Information.channelInfo_comap_eq_of_disintegration,MonadFormal.Information.exists_input_disintegration}
+\end{proof}
+
+The conditional kernel $R$ depends on the input law. It reconstructs
+the joint distribution, not the original microstate pointwise. Its
+mathematical existence does not provide an available measurement,
+an affordable decoder, or recovery of discarded data. The likelihood
+argument establishes the information identity even without such a kernel.
+
+\begin{theorem}[Capacity and realizable input laws]
+\label{thm:input-capacity}
+Suppose the admitted microstate laws
+$\mathcal A$ and macrostate laws $\mathcal B$ satisfy
+$q_*\mu\in\mathcal B$ for every $\mu\in\mathcal A$. Then
+\[
+ C(K\circ q;\mathcal A)\le C(K;\mathcal B).
+\]
+Equality holds if every $\nu\in\mathcal B$ is $q_*\mu$ for some
+$\mu\in\mathcal A$.
+\end{theorem}
+\begin{proof}
+Replace each $I(\mu,K\circ q)$ by $I(q_*\mu,K)$ using
+\Cref{thm:input-information}. Inclusion of these input laws gives
+the upper bound. Realizability gives the reverse bound, without
+requiring either supremum to be attained.
+\leanproof{MonadFormal.Information.capacity_comap_le,MonadFormal.Information.capacity_comap_eq}
+\end{proof}
+
+For a measurable nonnegative cost $c:M\to[0,+\infty]$ and budget $b$,
+put
+\[
+ \mathcal B_{c,b}=\left\{\nu\in\mathcal P(M):\int c\,d\nu\le b\right\}.
+\]
+The record channel $\RecordChannel$ has macrostate input alphabet
+$\mathcal M_s$. Its single-letter constrained capacity is therefore
+\begin{equation}\label{eq:channel-capacity}
+ \ChannelCapacityNats(\ResourceVec)
+ =C(\RecordChannel;\mathcal B_{c,b(\ResourceVec)})
+ =\sup_{P_M:\,\mathbb E[c(M)]\le b(\ResourceVec)}I(M;Y_R).
+\end{equation}
+\leandef{MonadFormal.Information.costAdmissible}
+
+\begin{corollary}[Cost transport and a sufficient realization condition]
+\label{cor:capacity-cost}
+Under the hypotheses above,
+\[
+ q_*\mu\in\mathcal B_{c,b}
+ \quad\Longleftrightarrow\quad
+ \mu\in\mathcal B_{c\circ q,b},\qquad
+ C(K\circ q;\mathcal B_{c\circ q,b})\le C(K;\mathcal B_{c,b}).
+\]
+If $q$ has a measurable right inverse $s:M\to X$, equality holds
+in the capacity bound.
+\end{corollary}
+\begin{proof}
+Change of variables gives $\int c\,d(q_*\mu)=\int c\circ q\,d\mu$.
+Apply \Cref{thm:input-capacity}. For the equality condition, every
+admitted $\nu$ lifts to $s_*\nu$ because $q\circ s=\operatorname{id}$;
+the same integral identity preserves its cost.
+\leanproof{MonadFormal.Information.map_mem_costAdmissible,MonadFormal.Information.capacity_cost_comap_le,MonadFormal.Information.cost_law_realizable_of_section,MonadFormal.Information.capacity_cost_comap_eq_of_section}
+\end{proof}
+
+The last equality uses the pulled-back macrostate cost. Additional
+microstate preparation or access restrictions must be included in
+$\mathcal A$; they can invalidate the realization condition.

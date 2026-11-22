@@ -1,0 +1,837 @@
+\section{The formal problem statement}\label{sec:problem-statement}
+
+This section states the MONAD research problem.
+\Cref{sec:introduction} onward develops MONAD-FORC~0.2 (Finite
+Observer-Resource Causality), the first fixed-context profile of the
+programme: the observer interface of \Cref{sec:observer} realizes a
+resource-indexed probe family, and detectable intervention influence
+in \Cref{sec:operational-causality} realizes a present-probe
+distinction over interventions.
+
+\subsection{Problem and scope}
+
+MONAD is a pure mathematical research programme. MONAD does not start
+from an AI system, a software architecture, a physical theory, or a
+model of cognition. Applied systems, quantum theory, biology, and
+information theory can provide examples and tests. They do not define
+MONAD\@. The name MONAD is a project name. It does not denote a monad
+in the sense of category theory~\cite{maclane1998categories}, although
+the paper uses categories.
+
+MONAD studies mathematical systems in which the set of meaningful
+distinctions is not fixed. A system can:
+\begin{enumerate}
+  \item compress its present description;
+  \item admit new distinctions that were not available in the old
+    description;
+  \item transform from one description to another;
+  \item preserve some structure and lose other structure during that
+    transformation;
+  \item assign different relevance to the same structure along
+    different trajectories;
+  \item change the space in which later transformations occur.
+\end{enumerate}
+
+The theory must describe these operations with compatible, explicitly typed
+constructions. A fixed ambient metaframework is permitted; its entire
+vocabulary must not be confused with the system's currently admitted or
+accessible distinctions. The theory must
+not treat present indistinguishability as permanent identity. The
+theory must not select a geometric, topological, probabilistic,
+smooth, linear, or categorical substrate unless the problem forces
+that structure. The first task is therefore not to find an equation.
+The first task is to identify the correct mathematical objects and
+operators.
+
+\subsubsection{Core problem}
+
+The shortest current statement is:
+
+\Principle{MONAD seeks a calculus of endogenous distinguishability.}
+
+``Distinguishability'' means that a mathematical description can
+separate one object, behavior, relation, or continuation from
+another. ``Endogenous'' means that the structure that determines those
+distinctions can itself change inside the theory.
+
+Compression works by deciding which distinctions can presently be
+ignored. The difficulty begins when a later admissible question
+depends on one of them:
+
+\Principle{How can a finite description compress what is known without
+silently destroying distinctions that an admissible future description
+can require?}
+
+The theory must also answer four further questions:
+\begin{itemize}
+  \item What does ``the same information'' mean when the language
+    used to express that information changes?
+  \item What does preservation mean when the space of possible
+    distinctions itself changes?
+  \item When does history matter even when two present descriptions
+    appear equivalent?
+  \item How can the theory detect that the present basis is
+    insufficient, rather than only optimize inside that basis?
+\end{itemize}
+
+\subsubsection{What MONAD is not}
+
+MONAD is not a theory of compression alone. It is not a theory of
+dynamical systems in a fixed state space. It is not a theory of path
+dependence alone. It is not ordinary category theory with different
+names. It is not a claim about quantum mechanics.
+
+MONAD does not assume retrocausality. It does not claim that a
+physical future sends information into the present. It does not use
+``chaos'' to mean that all possible outcomes physically coexist. It
+does not assume that a tensor is the correct final object, that a
+manifold is the correct substrate, or that every useful relation has a
+scalar value. It does not assume that the four working postulates are
+all primitive axioms. Some postulates can become theorems of deeper
+structure. The final theory must discover which structure is primitive
+and which structure is derived.
+
+\subsection{The minimal mathematical starting point}
+
+A category of description contexts records identities and associative
+composition without requiring a metric, measure or linear structure.
+
+Let $\Ctx$ be a category. An object $C \in \operatorname{Ob}(\Ctx)$ is
+a description context. A morphism $u : C \to D$ is an admissible
+transformation or extension between description contexts. This does
+not mean that category theory is the final substrate. It only gives
+identity and associative composition. These properties are already
+required by the problem.
+
+For each context $C$, let $\Carrier{C}$ be a carrier of entities
+represented in that context. The carrier does not have to be a vector
+space, a manifold, or finite. For each context $C$, let $\Probes{C}$
+be the family of admissible probes. A probe is a map
+$p : \Carrier{C} \to O_p$; the codomain $O_p$ can depend on the probe.
+A probe represents one distinction that the current description can
+express. For a morphism $u : C \to D$, assume, in the first model, a
+corresponding transport $u_* : \Carrier{C} \to \Carrier{D}$. This
+assumption can later be weakened.
+
+\input{MonadFormal/Sandbox}
+
+\subsubsection{The change in viewpoint}
+
+The continuation family, the probe family, the context, and the
+carrier can all change, so the equivalence relation itself can change:
+$\contEq{C} \to \contEq{C'}$. This is the formal meaning of a change
+in the available space of distinctions. It is not only a new value
+inside an old coordinate system. The coordinate system can become
+insufficient.
+
+\subsection{The four MONAD postulates}
+
+The four postulates are working requirements, not yet final axioms.
+The mature theory can show that one or more postulates follow from
+deeper structure.
+
+\subsubsection{Postulate I: generative openness}\label{ss:non-factorization}
+A description can acquire a genuinely new distinction. An extension
+$e : C \to C'$ is distinction-generating if there exist
+$x, y \in \Carrier{C}$ with $x \contEq{C} y$ but
+$e_*(x) \not\contEq{C'} e_*(y)$:
+
+\Principle{An equivalence class in $C$ can split in $C'$.}
+
+Such a split can merely reveal an old, previously unqueried bit; it is
+not sufficient evidence of a new language or degree of freedom.
+A second form of openness occurs when
+the new carrier contains objects that are not transported old objects:
+$\Carrier{C'} \setminus \operatorname{Im}(e_*) \neq \varnothing$.
+Generative openness therefore has at least two forms, refinement of
+old distinctions and extension beyond the old carrier. The theory
+must keep them apart.
+
+\paragraph{Generative openness as non-factorization.}
+
+Let $q_C : \Carrier{C} \to Q_C$ be a compression. A new probe after
+extension gives $f' = p' \circ e_*$. If $f' = \tilde f \circ q_C$ for
+some $\tilde f$, the old compressed representation already contains
+enough information for that new probe. If no such $\tilde f$ exists,
+$f'$ does not factor through $q_C$. A new distinction is not merely a
+new function. It is a function that cannot be expressed through the
+old quotient. Define the extension defect set:
+\begin{equation}
+  \ExtDefect(e, q_C)
+  = \{\, f' \in \ContProbes{C'} \circ e_* :
+     f' \text{ does not factor through } q_C \,\}.\label{eq:defect}
+\end{equation}
+$\ExtDefect(e, q_C) = \varnothing$ means the old compression remains
+sufficient under the extension. Otherwise the extension has exposed
+distinctions that the old compression cannot support.
+
+\input{MonadFormal/Quotient}
+
+\paragraph{Compression is relative, not absolute.}
+
+There is no MONAD notion of lossless compression without a declared
+distinction family. Lossless means lossless relative to
+$\ContProbes{C}$. If $\Conts{1} \subseteq \Conts{2}$ then
+$x \contEq{\Conts{2}} y \implies x \contEq{\Conts{1}} y$. A larger
+continuation family can only preserve or refine the equivalence
+relation.
+
+\Principle{An expansion of relevant continuations can force a finer
+compression.}
+
+\paragraph{The universal compression obstruction.}
+
+\input{MonadFormal/NoGo}
+
+\Principle{Unrestricted future openness plus perfect future-safe
+compression implies no nontrivial compression.}
+
+The proposition leaves one perfectly safe strategy: retain enough to
+answer every admissible future probe. Under joint separation, that
+strategy retains everything. Perfect caution has solved the problem
+by refusing to compress. Nontrivial compression therefore requires
+giving something up: which continuations count, whether the
+representation may be revised, how much approximation is tolerated,
+how much uncertainty or explicit defect is carried, what can be
+recovered afterward, what resources bound the observer, and how the
+accounts compose. The later sections study these relaxations
+separately. This tension
+is structural. It is not an implementation problem.
+
+\paragraph{Approximate anticipatory compression.}
+
+Exact sufficiency can be too strong. A later theory can add a measure
+$\mu_C$ over admissible continuations and a distortion
+$\ell(q, \gamma)$, giving a resource-sensitive compression:
+\begin{equation}
+  q^{\star} = \arg\min_q \left[ \operatorname{Complexity}(q)
+  + \beta\, \mathbb{E}_{\gamma \sim \mu_C}\, \ell(q, \gamma) \right].\label{eq:approx-compression}
+\end{equation}
+This resembles rate-distortion theory~\cite{shannon1959coding} and
+information bottleneck methods~\cite{tishby1999information}, and the
+complexity term connects to minimum description length and Kolmogorov
+complexity~\cite{rissanen1978modeling,li2008introduction}. However,
+the continuation family itself can change, so
+$\mu_C$ can be incomplete. Low expected loss under the current
+continuation model is not structural sufficiency under unknown
+extensions, and the two must be kept apart.
+
+\subsubsection{Postulate III: invariant accounting}
+
+A transformation must not only produce a result. It must admit an
+account of what happened to distinguishability. A transformation
+$T : C \to D$ can do at least four qualitatively different things.
+\emph{Preservation}: a distinction in $C$ remains a distinction in
+$D$. \emph{Hiding}: a distinction is not visible under the current
+target probes, but an admissible recovery can reconstruct it.
+\emph{Collapse}: a distinction in $C$ cannot be recovered after
+transformation. \emph{Novelty}: the target contains distinctions that
+cannot be generated from the source representation. The four cases
+must not merge into one generic notion of information loss; the
+accounting exists to keep them apart.
+
+\paragraph{Distinction collapse.}
+
+A first definition:
+\begin{equation}
+  \operatorname{Coll}(T)
+  = \{\, (x, y) : x \not\contEq{C} y,\;
+     T_*(x) \contEq{D} T_*(y) \,\}.\label{eq:collapse}
+\end{equation}
+This does not yet determine whether the distinction is irreversibly
+destroyed. For that, MONAD needs recovery.
+
+\paragraph{Recoverability.}
+
+Assume $T$ induces $\bar T : \Carrier{C}/{\contEq{C}} \to
+\Carrier{D}/{\contEq{D}}$. A distinction is recoverable on a specified
+substructure if there is a recovery map $R$ with
+$R \circ \bar T = \operatorname{id}$ on that substructure. Loss of
+immediate visibility does not imply destruction. MONAD must separate
+\emph{inaccessible} from \emph{irrecoverable}. Quantum information
+theory gives a useful existing
+model~\cite{petz1986sufficient,hayden2004structure}.
+
+\paragraph{Novelty under transformation.}
+
+In a general category one cannot write $D - \operatorname{Im}(T)$
+without additional structure, so novelty must first be defined
+intrinsically: a target distinction is novel relative to $T$ if it
+does not arise from transported source distinctions under the
+admissible transport rules. If an exact or additive structure is later
+justified, the concept sharpens through image, kernel, cokernel, exact
+sequences, extension classes, and cohomological obstructions. MONAD
+must earn these tools, not assume them for convenience.
+
+\paragraph{Invariant transport.}
+
+For a structure $I_C$ regarded as invariant in $C$, MONAD needs a
+transport operation of the form
+\begin{equation}
+  \TransportOp_T(I_C) = (I_D,\; L_T,\; N_T,\; \Pi_T),\label{eq:transport}
+\end{equation}
+where $I_D$ is the transported structure, $L_T$ records explicit loss,
+$N_T$ records newly expressible structure, and $\Pi_T$ records the
+witness for the transport claim. The domain and codomain of
+$\TransportOp_T$ are deliberately untyped at this stage. Whether $I_C$
+is a predicate, a subobject, an equivalence relation, a conserved
+quantity, or a theory is an open typing problem of the programme, and
+it is prior to any composition law: the class of invariant objects
+must be fixed before an interaction term can be posed. The notation is
+a first schema. The requirement is durable:
+
+\Principle{Loss and novelty must be first-class outputs of
+transformation. They must not be hidden in prose.}
+
+\paragraph{Composition creates the accounting problem.}
+
+For $C \xrightarrow{f} D \xrightarrow{g} E$, one can account for
+$g \circ f$ directly, or account for $f$ and then $g$. These accounts
+need not agree trivially. MONAD must determine whether
+$\Acct(g \circ f)$ is completely determined by $\Acct(f)$ and
+$\Acct(g)$, or whether an irreducible interaction term exists. The
+programme states this as an open question, not as an equation:
+
+\Principle{Open problem. Under which substrates does transformation
+accounting admit functorial composition, and what obstruction measures
+the failure of such composition?}
+
+If composition requires an independent obstruction object, the theory
+must identify its natural home (a cocycle, an extension class,
+curvature, a derived functor, or nothing at all) and must not select
+one before the substrate requires it. An equation with an interaction
+term would commit the theory to an additive picture it has not yet
+earned.
+
+\subsubsection{Postulate IV: trajectory-sensitive relevance}\label{ss:trajectory-relevance}
+
+A distinction can have different importance along different
+trajectories. This is stronger than ordinary path dependence: the
+relevance itself can depend on the path. For a path
+$\gamma : C_0 \to C_1 \to \cdots \to C_n$ and a family $\Gamma$ of
+admissible continuations from $C_n$, MONAD requires a relevance object
+$\Relevance(\gamma, \Gamma)$. The letter $\Gamma$ names a family
+taken from a path endpoint; $\Conts{C}$ names the family attached to
+one context. The theory must not assume that
+$\Relevance$ is a scalar. It can be a relation, an order, a subobject,
+a family of probes, an operator, a multilinear object, or another
+structure forced by the final substrate. A scalar attention weight is
+only one special case.
+
+\Principle{Open problem. Determine the codomain and type of the
+trajectory-relevance object $\Relevance$.}
+
+Until that type is fixed, $\Relevance$ is a requirements placeholder,
+not a mathematical object. Postulates I and II are at present more
+formal than III and IV, so the four pillars are not yet mathematically
+symmetric. The primitive-versus-derived question below already asks
+whether relevance is primitive; that reduction, from relevance to
+continuation structure, should be investigated before more machinery
+is added.
+
+\paragraph{Relevance depends on trajectory, not only endpoint.}
+
+For two paths $\gamma_1, \gamma_2 : C_0 \leadsto C_n$ with the same
+endpoints, MONAD permits
+$\Relevance(\gamma_1, \Gamma) \neq \Relevance(\gamma_2, \Gamma)$:
+
+\Principle{The same endpoint can have different applicability
+structure because the histories differ.}
+
+This is the exact mathematical issue behind the holonomy analogy.
+MONAD does not assume a connection or a bundle. If later structure
+permits a transport operator $\TransportOp_\gamma$, a closed loop can
+have $\TransportOp_\gamma \neq \operatorname{id}$, a holonomy-like
+defect. The theory must first earn the structure that makes the
+statement valid.
+
+\paragraph{Past and continuation jointly condition the present.}
+
+The current distinguishability relation can depend on both the path by
+which the context was reached and the admissible continuations from
+it, giving the more complete relation
+$x \contEq{C;\,\gamma,\,\Gamma} y$. The path represents historical
+dependence; the continuation family represents anticipatory
+dependence. No backward physical causation is required. The present
+mathematical structure is indexed by both sides of a path.
+
+\paragraph{Basis discovery.}
+
+Ordinary relevance systems ask which represented dimensions are
+important. MONAD must also permit the stronger question: is the
+current family of dimensions itself insufficient? The formal witness
+is again non-factorization (\Cref{ss:non-factorization}): if a
+trajectory makes a probe $p'$ relevant and $p'$ does not factor
+through the current quotient, the representation cannot express a
+distinction the trajectory requires.
+Trajectory-sensitive relevance therefore triggers generative openness.
+The four postulates cannot remain independent modules.
+
+\subsection{Compatibility between the four postulates}
+
+Compatibility requires exact translations and shared assumptions between
+the four pillars, whether their mathematics is reused or extended.
+The subsections below state the minimum cross-postulate laws. The laws
+in this group are definitional sanity checks: each follows quickly
+from the definitions it relates. They validate the vocabulary. They
+are useful whether or not a new calculus is needed.
+
+\input{MonadFormal/Defect}
+\input{MonadFormal/Monotonicity}
+\input{MonadFormal/Extension}
+\input{MonadFormal/Refinement}
+\input{MonadFormal/Counterexample}
+
+\subsubsection{Compression-invariant compatibility}
+An invariant claim is prohibited when the invariant does not factor
+through the compressed representation: no invariant claim may depend
+on a distinction already removed by compression. This connects
+Postulates II and III\@.
+
+\subsubsection{Path-accounting compatibility}
+Transport along concatenated paths must compose,
+$\TransportOp_{\gamma_2 * \gamma_1} = \TransportOp_{\gamma_2} \circ
+\TransportOp_{\gamma_1}$, unless the theory explicitly records a
+defect that explains the failure. If closed-loop transport is
+nontrivial, endpoint-only accounting is insufficient. This connects
+Postulates III and IV\@.
+
+\subsubsection{Relevance-openness compatibility}
+If relevance identifies a distinction not expressible in the current
+quotient, it cannot be silently discarded: the representation
+refines, the context extends, the distinction is declared
+unresolved, or a controlled approximation is recorded. Relevance
+cannot create a requirement and then allow the representation to
+ignore it silently. This connects Postulates IV and I.
+
+\subsubsection{Open-world honesty}
+
+Current indistinguishability is not equality. Current non-relevance is
+not permanent irrelevance. Failure to produce a distinction is not
+proof that the distinction does not exist. MONAD therefore requires an
+explicit unresolved status: when $x \presentEq{C} y$ but an admissible
+continuation separates them, any claim requiring their permanent
+identity is unsupported, and the correct status is
+\emph{underdetermined}. Confusion here does not mean random behavior.
+It means the present distinction structure is insufficient to justify
+a stronger claim.
+
+\subsubsection{The wrong-basis problem}
+
+A system can be optimal inside a bad representation. In a smooth
+specialization, $\nabla_M L(x^{\star}) = 0$ can hold while an
+extension $i : M \hookrightarrow M'$ admits a direction
+$v \in T_{i(x^{\star})} M'$ with $D_v L < 0$; the optimum was relative
+to the old space. The general condition needs no derivatives:
+
+\Principle{Minimality in $C$ does not imply minimality after an
+admissible extension $C \to C'$.}
+
+MONAD must distinguish optimization failure from representation
+failure.
+
+\subsection{Choosing the mathematical substrate}
+
+Each mathematical structure gives useful operators and imports
+assumptions. Differentiation needs local limit structure. A Riemannian
+metric needs a smooth manifold with inner products. Kernels and
+cokernels need categorical structure. Exact sequences need more.
+Relative entropy needs probabilistic or operator-algebraic structure.
+Holonomy normally needs a connection. Cohomology needs a suitable
+complex, site, or sheaf.
+
+\Principle{Add mathematical structure only when a MONAD requirement
+forces it.}
+
+This is the substrate principle.
+
+\subsubsection{Minimal first sandbox}\label{ss:sandbox}
+
+The first formal sandbox is deliberately weak. Use sets as carriers,
+functions as transformations, families of probes and continuations,
+equivalence relations, and quotient sets. The sandbox suffices to test
+generative openness, continuation-sensitive equivalence, exact
+compression, factorization failure, the no-go result, and simple
+composition questions.
+
+If the model becomes insufficient, the failure itself identifies what
+structure to add:
+\begin{itemize}
+  \item an order, metric, divergence, or measure for quantitative loss;
+  \item bundle or categorical structure for path transport;
+  \item exact or abelian categories for algebraic accounting;
+  \item probability for anticipation;
+  \item smooth structure for sensitivity.
+\end{itemize}
+
+\subsubsection{Primitive versus derived structure}
+
+The theory must search for the smallest axiom set
+$\mathcal{A} = \{A_1, \ldots, A_n\}$ with
+$\mathcal{A} \vdash P_1, P_2, P_3, P_4$ and the required coherence
+laws, minimizing $|\mathcal{A}|$. A postulate that follows from the
+other structure must become a theorem, not remain an independent
+axiom.
+
+For every proposed object, ask whether it is primitive or can be
+derived from a smaller structure. Does relevance follow from
+continuation structure? Does openness follow from failure of
+factorization? Does invariant accounting arise from a universal
+property? Does path dependence arise from non-flat transport? Can
+dimension be defined through separating families of probes? The theory
+must prefer derivation over declaration.
+
+\subsubsection{The intrinsic-geometry requirement}
+
+A mature theory must be representation-invariant: for an isomorphic
+re-description $\phi : C \to C'$, a valid MONAD quantity transforms
+naturally, independent of names and presentation. The long-term goal
+is intrinsic operators that make transformation properties directly
+visible, in the role the determinant plays for oriented volume.
+
+\subsubsection{A provisional transformation signature}\label{ss:signature}
+
+One provisional form is
+\begin{equation}
+  \Sigma(T) = (P_T,\; C_T,\; R_T,\; N_T,\; H_T),\label{eq:signature}
+\end{equation}
+recording preserved structure, collapsed distinctions,
+recoverability, novelty, and path dependence. The tuple is a
+requirement on what the final mathematics must expose. One deeper
+object from which these quantities follow would be preferable.
+
+\subsubsection{One structure, not four}
+
+The goal is one structure in which the four postulates are natural
+aspects of the same object. Openness changes the quotient structure.
+Compression changes available distinctions. Invariant transport
+constrains admissible transformations. Path structure changes
+relevance. Relevance can force new distinctions. New distinctions
+invalidate old compressions. This is a research criterion, not yet a
+result.
+
+\subsection{Existing mathematics that MONAD must reuse}
+
+MONAD must not reinvent results that already exist. Existing
+mathematics must be imported where the match is exact. A gap must be
+stated precisely where the match is incomplete.
+
+\subsubsection{Partition and quotient theory}
+This gives indistinguishability classes, coarse-graining, refinement,
+and quotient representations. A fixed carrier produces a lattice of
+partitions. Changing these data is not by itself a gap: compare maps
+between carriers, partition refinements and the exact factorization
+results before introducing another construction.
+
+\subsubsection{Coalgebra and behavioral equivalence}\label{sss:coalgebra}
+Bisimulation and observational
+equivalence~\cite{rutten2000universal,jacobs2016introduction} come
+close to $x \contEq{C} y$. The comparison must specify the observation
+signature and transition model. Observational equivalence and bisimulation
+are not interchangeable without their respective hypotheses; changes of
+signature must be compared with the corresponding established machinery.
+
+\subsubsection{Abstract interpretation}\label{sss:abstract-interpretation}
+Sound approximation and refinement~\cite{cousot1977abstract} are
+directly relevant to safe compression, and completeness of an
+abstract domain makes the insufficiency of an abstraction itself a
+formal object~\cite{giacobazzi2000making}. A changing domain is not
+an escape from abstraction refinement. The exact partition correspondence
+is proved in \Cref{thm:partition-completeness,cor:budget-completeness}.
+The separate operational question is whether the refined information can
+be obtained from actual retained access, and at what cost.
+
+\subsubsection{Sufficient statistics and information theory}
+Sufficiency, rate-distortion, and information
+bottleneck~\cite{cover2006elements,shannon1959coding,tishby1999information}
+approximate anticipatory compression. Computational mechanics
+sharpens the pattern: causal states are the minimal sufficient
+statistic of history for predicting
+futures~\cite{shalizi2001computational}. For a later change of relevance,
+compare fixed-target, multitask and uncertain-target formulations. A
+representation sufficient for one target need not be sufficient for a
+different one; naming that change does not itself establish a new theorem.
+
+\subsubsection{Quantum information theory}\label{ss:qit}
+% monad-open: quantum-correspondence
+
+For a quantum channel $\Phi$ the data processing inequality
+holds~\cite{nielsen2010quantum}:
+\begin{equation}
+  D(\rho \Vert \sigma) \ge D(\Phi(\rho) \Vert \Phi(\sigma)).\label{eq:dpi}
+\end{equation}
+Equality conditions connect to Petz-type recovery: sufficiency of a
+channel is characterized by the existence of a recovery
+map~\cite{petz1986sufficient,hayden2004structure}. This is directly
+relevant to the difference between hidden and irrecoverable. The precise
+state, channel, support and recovery hypotheses must travel with the
+imported theorem. The MONAD comparison question is:
+
+\Principle{What happens to sufficiency and data-processing-like
+bounds when the family of admissible distinctions itself expands?}
+
+\subsubsection{Renormalization and coarse-graining}
+
+Renormalization~\cite{wilson1975renormalization} disciplines
+scale-dependent description, effective
+degrees of freedom, and relevant operators. Determine which changing
+descriptions already fit a renormalization construction. Neither a
+shared coarse-graining vocabulary nor a fixed microscopic theory proves
+equivalence or inequivalence with MONAD's operational problem.
+
+\subsubsection{Contextuality and sheaf methods}
+
+These handle context-dependent observability, local compatibility, and
+local-to-global obstructions~\cite{abramsky2011sheaf}. An extensible
+context family needs an explicit comparison of covers and their maps;
+the fact that an individual theorem fixes a cover is not a demonstrated
+limitation of the framework.
+
+\subsubsection{Differential geometry, connections, and holonomy}\label{ss:holonomy}
+
+These supply transport, path dependence, curvature, and
+holonomy~\cite{kobayashi1963foundations}: a
+close model for \Cref{ss:trajectory-relevance}. The manifold, bundle
+and connection are additional hypotheses. Holonomy is a candidate specialization of
+trajectory sensitivity, not a MONAD axiom.
+
+\subsubsection{Exact and homological algebra}\label{ss:homological}
+
+Kernel, image, cokernel, exact sequences, and cohomology offer a
+canonical accounting language~\cite{weibel1994introduction}. Use it
+when additive or exact structure is actually available; do not introduce
+such structure solely to make an accounting metaphor look formal.
+
+\subsubsection{Fibrations, indexed categories, and institutions}
+
+These permit different contexts to carry different local languages,
+with transport between
+fibers~\cite{goguen1992institutions,jacobs1999categorical}. They are
+strong candidates for the
+architecture of variable description spaces. Existing frameworks already
+describe language families and their transformations; this statement also
+uses an ambient metaframework. The task is to translate the operational
+problem, compose applicable results and record exact unmet hypotheses.
+No absence-of-a-single-framework claim supplies evidence of a gap.
+
+\subsubsection{Variational and path-space mathematics}
+
+A functional over complete trajectories models whole-path constraint
+without backward causation. Changes of admissible path families must be
+tested against ordinary constrained optimization, control and state
+augmentation, with their memory and computational costs stated.
+
+\subsubsection{Open-ended evolution and adaptive systems}
+
+These fields study new structures, changing networks, and changing
+state spaces at the application level~\cite{bedau2000open}. A concrete
+update rule can be useful mathematics, not a defect to reject for being
+domain-specific. Its assumptions must be separated from any proposed
+general law of changing distinguishability.
+
+\subsubsection{Information geometry}
+
+Divergences, metric structure, and dual connections give intrinsic
+geometry to statistical distinguishability~\cite{amari2000methods}. This becomes useful if a
+probabilistic substrate is earned. A changed statistical model needs a
+specified comparison map and regularity conditions; it is not automatically
+a new geometry or an obstruction to known information geometry.
+
+\paragraph{Limits of the quantum analogy.}
+
+MONAD must not equate wave-function collapse with ontology change.
+The imported lessons are narrower:
+\begin{itemize}
+  \item observability can be context-dependent;
+  \item not all questions are jointly representable;
+  \item coarse-graining has formal information loss;
+  \item distinguishability obeys monotonicity under channels;
+  \item recoverability characterizes when apparent loss is
+    reversible.
+\end{itemize}
+MONAD remains a separate mathematical question.
+
+\subsection{Endogenous and recursive change}
+
+MONAD must eventually support more than one level of description: a
+hierarchy $\Ctx_0, \Ctx_1, \Ctx_2, \ldots$ in which the rules defining
+admissible transformations at one level become objects at the next.
+Impredicative self-reference is not needed in the first theory. A
+theory confined to one fixed description layer is incomplete relative
+to the research goal. The recursive extension is a later theorem
+target.
+
+\subsubsection{Higher-order change}
+
+MONAD distinguishes change of an entity ($x \to x'$), change
+of the description ($C \to C'$), and change of the rules for changing
+descriptions ($\TransportOp_C \to \TransportOp_{C'}$). The third
+change modifies the transformation space itself.
+
+\subsubsection{The self-similar pattern}
+
+At many levels the same pattern recurs: description, compression or
+transformation, residual defect, description refinement, new
+transformation. This is structural self-similarity, not a claim of
+literal fractal geometry. The theory must only permit the
+transformation problem to recur on transformed description spaces.
+
+\subsubsection{Confusion as a valid state}
+
+When different members of a current equivalence class can produce
+different outcomes under admissible but unresolved extensions, the
+current description does not support a unique stronger statement. The
+valid result is \emph{underdetermined}. This protects the theory from
+false certainty.
+
+\subsubsection{The representation-residual principle}
+
+If a representation explains part of a structure and leaves a residual
+$\varepsilon$, the theory must not automatically classify
+$\varepsilon$ as noise. The residual can indicate measurement noise,
+model error, an omitted variable, a missing distinction, a missing
+dimension, or the wrong description space. Criteria separating these
+possibilities are a major open problem. A theory that always absorbs
+residuals into parameter error cannot satisfy generative openness.
+
+\subsection{Proved baselines and remaining questions}
+
+The exact set-based results are the observational equivalence,
+coarsest quotient, unique descent, family-growth, universal compression,
+empty-defect and covered-extension theorems above. Their precise scopes
+are stated where proved; a result in this substrate does not settle
+every enriched or resource-bounded version of the corresponding question.
+
+The remaining research questions are:
+\begin{description}
+  \item[Resource minimality.] Which objective is minimized: class count,
+    bits, computation, update, measurement, communication or decision loss?
+  \item[Recovery.] What information remains accessible, which recovery
+    operations are admitted, and what is their minimum cost?
+  \item[Composition.] When does accounting compose exactly, and what
+    demonstrated obstruction remains when it does not?
+  \item[Path dependence.] When is endpoint-only transport sufficient?
+    Do differences persist after ordinary hidden state is restored?
+  \item[Trajectory relevance.] How does a changed policy or trajectory
+    family change the distinctions a present representation must preserve?
+  \item[Expressivity.] Did selection, budget, probes, language, operations,
+    carrier or access change? Non-factorization alone does not answer this.
+  \item[Substrate.] What minimal structure supports the requested operations?
+  \item[Endogenous and recursive change.] What constructs, admits and
+    validates a new context, and when can transformations become objects
+    without uncontrolled self-reference?
+\end{description}
+
+\subsubsection{Approximate and resource-bounded MONAD}
+
+The exact set-based theory is the starting point. The resource and
+statistical specializations in the following sections study parts of the frontier
+$\operatorname{Defect}(q_B)$ against a resource budget $B$, with
+bounds of the form
+$\inf_{\operatorname{cost}(q) \le B} \operatorname{Risk}(q)$. Cost and
+risk depend on the chosen substrate. A general law relating these
+quantities across changing contexts remains open.
+
+\subsubsection{A possible probabilistic anticipation layer}
+
+A probabilistic layer can place a measure over continuations and
+derive relevance from path-space expectation, with the scalar form
+$R_C(d) = \mathbb{E}_{\gamma \sim \mu}[U(d, \gamma)]$ only a
+specialization. This layer is also not part of the minimal pure
+theory.
+
+\subsubsection{The determinant criterion}
+
+A mature theory makes these facts intrinsic, refining the signature
+of \Cref{ss:signature}:
+\begin{itemize}
+  \item whether a transformation collapses a distinction;
+  \item whether it creates one;
+  \item whether apparent loss is recoverable;
+  \item whether an invariant survives;
+  \item whether path matters;
+  \item whether the present basis is sufficient;
+  \item whether a future extension invalidates a prior compression.
+\end{itemize}
+The target is not a specific formula. The target is the correct
+object.
+
+\subsubsection{Correspondence requirements}
+
+These are required correspondences, not a list of completed reductions.
+For fixed probes, the set-based construction gives observational
+equivalence; a behavioral or bisimulation correspondence additionally
+needs the transition assumptions of \Cref{sss:coalgebra}. The exact
+partition abstraction correspondence is proved in
+\Cref{thm:partition-completeness,cor:budget-completeness}.
+Probabilistic specializations must match the relevant data-processing
+and sufficiency results; the quantum comparison in \Cref{ss:qit}
+requires its own state and channel structure. A smooth-bundle
+specialization with a connection should recover ordinary transport and
+holonomy (\Cref{ss:holonomy}); an exact-category specialization should
+use its kernel, image, cokernel and exact-sequence machinery
+(\Cref{ss:homological}). The latter specializations remain targets.
+MONAD-FORC~0.2
+(\Cref{sec:state-space} onward) is the first fixed-context
+correspondence target of this programme.
+
+\subsubsection{Separation from applications}
+
+MONAD is the mathematics of changing descriptions and
+distinguishability. A governed operational system can freeze a
+description and operate within it. Application and research systems
+can use MONAD structure, test it, and supply examples. They must not
+define its axioms.
+
+\subsection{The complete MONAD problem}
+
+Let $\Ctx$ be a compositional family of description contexts with
+carriers, probe families, and continuation-induced
+$\contEq{C}$. MONAD seeks a minimal, representation-independent
+calculus that does all of the following:
+\begin{enumerate}
+  \item \textbf{It represents generative openness.} It identifies when
+    a context extension introduces distinctions that cannot factor
+    through the prior representation.
+  \item \textbf{It defines anticipatory compression.} It identifies
+    the coarsest representation that preserves the distinctions a
+    continuation family requires, and characterizes how this fails
+    when the family expands.
+  \item \textbf{It gives invariant accounting.} It distinguishes
+    preservation, temporary inaccessibility, recoverability,
+    irreversible collapse, and novelty, with a compositional law or an
+    explicit obstruction.
+  \item \textbf{It gives trajectory-sensitive relevance.} Relevance need
+    not be scalar; it depends on history and admissible continuations and
+    detects required distinctions the representation cannot express.
+  \item \textbf{It enforces compatibility.} The four structures
+    constrain one another through theorems, and unknown distinctions
+    stay unresolved until the theory justifies their treatment.
+  \item \textbf{It exposes the limits of its own substrate.} Structure
+    is added only when a theorem, counterexample, or impossibility
+    result forces the addition.
+  \item \textbf{It supports recursive extension.} Description
+    transformations become objects at a higher level without letting a
+    description validate its own change rules.
+\end{enumerate}
+
+\Principle{MONAD asks: how can a mathematical system define, compress,
+transport, and revise its own space of distinctions when admissible
+future continuations, historical trajectories, and transformations can
+change what is distinguishable?}
+
+The four primary requirements are generative openness, anticipatory
+compression, invariant accounting, and trajectory-sensitive relevance.
+The higher-order requirement is compatibility and coherence.
+\begin{itemize}
+  \item The tension: finite compression against future
+    distinctions that are not yet representable.
+  \item The epistemic rule: indistinguishable now is not
+    identical forever.
+  \item The obstruction: unrestricted openness with perfect
+    future-safe compression forces trivial compression
+    (\Cref{prop:no-go}).
+  \item The objective: the intrinsic object that makes
+    preservation, collapse, novelty, recoverability, and trajectory
+    dependence directly visible.
+\end{itemize}

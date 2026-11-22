@@ -1,0 +1,61 @@
+% Lean module: MonadFormal.Information.Testing.Hellinger.Regularity
+\paragraph{Local square-root regularity.}
+
+Consider a real-indexed family of square-root densities $r_\theta$ over
+the same $\mu$. Square-root regularity at $\theta$ means differentiability
+as an $L^2$-valued function: for some $v\in L^2(\mu;\mathbb R)$,
+\[
+ r_{\theta+h}=r_\theta+h v+o_{L^2}(|h|).
+\]
+The norm topology is essential; pointwise differentiation alone does
+not control the integrals below. This is the square-root formulation
+underlying quadratic-mean regularity in local statistical theory
+\cite{duchi2018localTesting}.
+\leandef{MonadFormal.Information.HasRootDerivAt}
+
+\begin{theorem}[Local Hellinger and total-variation coefficients]
+\label{thm:local-density-distances}
+For such a family, write $P_\theta=r_\theta^2\mu$. Then
+\[
+ \langle r_\theta,v\rangle=0,
+ \qquad
+ \lim_{h\to0,\,h\ne0}\frac{H^2(P_{\theta+h},P_\theta)}{h^2}
+ =\frac12\|v\|_2^2.
+\]
+Its densities are differentiable in $L^1$, with derivative
+$2r_\theta v$, and
+\[
+ \lim_{h\to0,\,h\ne0}
+ \frac{d_{\mathrm{TV}}(P_{\theta+h},P_\theta)}{|h|}
+ =\|r_\theta v\|_1.
+\]
+The coefficients may vanish; nondegeneracy is not automatic.
+\end{theorem}
+\begin{proof}
+Differentiate $\|r_\theta\|_2^2=1$ to obtain
+$2\langle r_\theta,v\rangle=0$.
+The difference quotient $(r_{\theta+h}-r_\theta)/h$ converges to $v$
+in $L^2$. Taking squared norms and dividing by two gives the Hellinger
+limit.
+
+Multiplication is a bounded bilinear map
+$L^2\times L^2\to L^1$, since
+$\|fg\|_1\le\|f\|_2\|g\|_2$ by Cauchy--Schwarz.
+Its product rule therefore gives
+\[
+ \frac{r_{\theta+h}^2-r_\theta^2}{h}
+ \longrightarrow 2r_\theta v\quad\text{in }L^1.
+\]
+Taking norms is continuous, and \Cref{thm:hellinger-tv} identifies
+total variation with half the $L^1$ norm of the density difference.
+Thus its quotient by $|h|$ tends to
+$\tfrac12\|2r_\theta v\|_1=\|r_\theta v\|_1$.
+\leanproof{MonadFormal.Information.HasRootDerivAt.orthogonal,MonadFormal.Information.HasRootDerivAt.hellinger_limit,MonadFormal.Information.l2Product,MonadFormal.Information.l2Product_coe,MonadFormal.Information.l2Product_norm_le,MonadFormal.Information.l2Product_comm,MonadFormal.Information.l2ProductCLM,MonadFormal.Information.RootDensity.density,MonadFormal.Information.RootDensity.density_coe,MonadFormal.Information.RootDensity.tv_eq_density_norm,MonadFormal.Information.HasRootDerivAt.density_deriv,MonadFormal.Information.HasRootDerivAt.tv_limit}
+\end{proof}
+
+% monad-open: information-profile
+These are single-observation, scalar-parameter expansions. Passing
+to independent product laws or a limiting optimal test is a further
+step. A KL expansion is different again: the argument above never
+differentiates a log likelihood and supplies no bound on its tails
+or on likelihood ratios near zero.

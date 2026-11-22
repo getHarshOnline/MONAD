@@ -1,0 +1,69 @@
+% Lean module: MonadFormal.Information
+\subsection{Mutual information and record processing}
+\label{sec:record-information}
+
+For a joint probability law $\rho$ on measurable spaces $X\times Y$,
+write $\rho_X,\rho_Y$ for its marginals and define
+\[
+ I(\rho)=D_{\mathrm{KL}}(\rho\Vert\rho_X\otimes\rho_Y)
+ \in[0,+\infty].
+\]
+All logarithms here are natural: information is measured in nats.
+The value $+\infty$ is retained. For a Markov record channel
+$K:X\rightsquigarrow Y$ and input law $\mu$, let
+\[
+ I(\mu,K)=I(\mu\otimes K),\qquad
+ C(K;\mathcal A)=\sup_{\mu\in\mathcal A}I(\mu,K),
+\]
+where $\mu\otimes K$ denotes the joint law obtained by drawing the
+input from $\mu$ and the record conditionally through $K$.
+The admissible input laws $\mathcal A\subseteq\mathcal P(X)$ are
+part of the capacity specification~\cite{gallager1968information}.
+\leandef{MonadFormal.Information.mutualInfo,MonadFormal.Information.channelInfo,MonadFormal.Information.capacity}
+
+\begin{theorem}[Mutual-information contraction]
+\label{thm:information-contraction}
+If $K:X\rightsquigarrow Z$ and $L:Y\rightsquigarrow W$ process
+the two coordinates independently conditional on their inputs, then
+\[
+ I((K\otimes L)\rho)\le I(\rho).
+\]
+This includes separate measurable maps of either coordinate.
+An independent joint law has zero mutual information.
+\end{theorem}
+\begin{proof}
+The processed marginals are $K\rho_X$ and $L\rho_Y$, and
+\[
+ (K\otimes L)(\rho_X\otimes\rho_Y)
+   =(K\rho_X)\otimes(L\rho_Y).
+\]
+Apply relative-entropy data processing to the joint law and its
+independent reference law. For measurable maps, pushforward commutes
+with both marginals and their product, giving the same argument.
+For an independent law, the two arguments of relative entropy coincide.
+\leanproof{MonadFormal.Information.mutualInfo_map_le,MonadFormal.Information.mutualInfo_prod,MonadFormal.Information.parallel_comp_prod,MonadFormal.Information.fst_parallel_comp,MonadFormal.Information.snd_parallel_comp,MonadFormal.Information.mutualInfo_parallel_le}
+\end{proof}
+
+\begin{corollary}[Record processing and admissible-law monotonicity]
+\label{cor:capacity-processing}
+For a further record channel $L$ and the same input-law constraint,
+\[
+ I(\mu,LK)\le I(\mu,K),\qquad
+ C(LK;\mathcal A)\le C(K;\mathcal A).
+\]
+Also, $\mathcal A\subseteq\mathcal B$ implies
+$C(K;\mathcal A)\le C(K;\mathcal B)$.
+\end{corollary}
+\begin{proof}
+The input and output marginals of $\mu\otimes K$ are $\mu$ and
+$K\mu$, so
+$I(\mu,K)=D_{\mathrm{KL}}(\mu\otimes K\Vert\mu\otimes(K\mu))$.
+Keep the input coordinate unchanged and apply
+\Cref{thm:information-contraction} to the output coordinate.
+Taking suprema proves the channel bound; inclusion of the admissible
+input laws proves the final bound. No maximizing input law is assumed.
+\leanproof{MonadFormal.Information.channelInfo_eq,MonadFormal.Information.channelInfo_postprocess,MonadFormal.Information.channelInfo_le_capacity,MonadFormal.Information.capacity_mono,MonadFormal.Information.capacity_postprocess}
+\end{proof}
+
+\input{MonadFormal/Information/Likelihood}
+\input{MonadFormal/Information/Input}

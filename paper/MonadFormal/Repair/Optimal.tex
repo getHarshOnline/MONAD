@@ -1,0 +1,115 @@
+% Lean module: MonadFormal.Repair.Optimal
+\subsection{Minimum cost, productive queries, and termination}
+\label{sec:optimal-repair}
+
+Keep the access model of Section~\ref{sec:obtainable-repair}; in particular,
+queries read an actually available source without changing it. Assume the
+answer set $V$ is nonempty. Costs are nonnegative integers; free queries
+are allowed. Define
+\[
+ \mathsf V(S)=\inf\{b\in\mathbb N:\mathsf F(S,b)\}
+ \quad\text{in }\mathbb N\cup\{\infty\},
+ \qquad \inf\varnothing=\infty.
+\]
+A query is \emph{productive on $S$} when it separates two compatible states:
+\[
+ J_S=\{j:\exists x,y\in S,\ m_j(x)\ne m_j(y)\}.
+\]
+For a finite outcome set $O$, a tree has the explicit worst-case cost
+\[
+ c(\operatorname{answer}(v))=0,\qquad
+ c(\operatorname{query}(j,(T_o)_{o\in O}))
+   =w_j+\max_{o\in O}c(T_o),
+ \qquad \max\varnothing=0.
+\]
+This counts every syntactic branch. Unreachable branches can receive
+arbitrary zero-cost answers because $V$ is nonempty.
+\leandef{MonadFormal.Repair.optimalCost,MonadFormal.Repair.Splits,MonadFormal.Repair.worstCost}
+
+\begin{theorem}[Attained minimum repair cost]\label{thm:minimum-repair}
+For every finite budget $b$,
+\[
+ \mathsf V(S)\le b\iff\mathsf F(S,b).
+\]
+Moreover, $\mathsf V(S)=\infty$ exactly when no finite budget permits
+repair. If $O$ is finite and $\mathsf V(S)<\infty$, there is a correct
+tree $T$ with $c(T)=\mathsf V(S)$.
+\end{theorem}
+\begin{proof}
+Feasibility is upward closed in the budget: an induction on the tree
+preserves its root allowance and increases every residual allowance.
+A nonempty set of natural-number budgets has a least member, so the
+infimum is a feasible budget whenever it is finite. This proves the
+displayed equivalence and the impossibility statement.
+
+For finite $O$, induction on the tree shows that its recursive budget
+condition is equivalent to $c(T)\le b$: a query can be paid for precisely
+when its cost plus the maximum child cost is at most $b$. Choose a tree
+feasible at the least budget. Its cost cannot be larger than that budget;
+if it were smaller, the same tree would contradict minimality.
+\leanproof{MonadFormal.Repair.within_mono,MonadFormal.Repair.feasible_mono,MonadFormal.Repair.within_iff_worstCost_le,MonadFormal.Repair.optimalCost_le_iff,MonadFormal.Repair.optimalCost_attained,MonadFormal.Repair.optimalCost_eq_top_iff,MonadFormal.Repair.optimal_tree}
+\end{proof}
+
+\begin{theorem}[Productive-query Bellman equation]\label{thm:repair-bellman}
+If $r$ is constant on $S$, then $\mathsf V(S)=0$; this includes
+$S=\varnothing$. Otherwise,
+\[
+ \mathsf V(S)=\inf_{j\in J_S}
+   \left[w_j+\sup_{o\in O}\mathsf V(S_{j,o})\right].
+\]
+For finite query and outcome sets, these are a minimum and maximum,
+with the empty-set conventions above. No positive-cost assumption is
+required. In particular, a nonconstant target can still have value zero
+when productive free measurements are available.
+\end{theorem}
+\begin{proof}
+A constant answer gives a zero-cost leaf. Otherwise $S$ is nonempty.
+Consider a feasible tree. If its root query does not split $S$, every
+compatible state selects the same child. Delete that root and retain
+this child: correctness on $S$ is unchanged, and the child's allowance
+can be enlarged to the original budget. Induction on the original tree
+eventually exposes a productive root, since a correct constant leaf
+would contradict nonconstancy. Conversely, any productive root with
+feasible children gives a feasible tree. Thus
+\[
+ \mathsf F(S,b)\iff
+ \exists j\in J_S:\ w_j\le b\ \text{and}\
+   \forall o,\ \mathsf F(S_{j,o},b-w_j).
+\]
+Replace child feasibility by the corresponding bound on $\mathsf V$.
+For extended natural numbers, the bound on a query's cost plus its
+supremum child value is equivalent to these residual-budget bounds.
+An infimum in $\mathbb N\cup\{\infty\}$ has a witness whenever it is
+at most a finite $b$. Consequently both sides of the Bellman equation
+have exactly the same finite upper bounds, which determines their value.
+\leanproof{MonadFormal.Repair.feasible_split_iff,MonadFormal.Repair.inf_le_nat_iff,MonadFormal.Repair.nat_add_le_nat_iff,MonadFormal.Repair.eq_of_same_nat_bounds,MonadFormal.Repair.optimalCost_bellman,MonadFormal.Repair.optimalCost_constant,MonadFormal.Repair.optimalCost_empty}
+\end{proof}
+
+\begin{theorem}[Cardinality-founded repair recursion]\label{thm:repair-termination}
+For finite $S$, every branch of a productive query satisfies
+$|S_{j,o}|<|S|$. The recursion that returns zero on constant-target sets
+and otherwise applies the productive-query Bellman equation is therefore
+well founded and returns $\mathsf V(S)$.
+\end{theorem}
+\begin{proof}
+Choose $x,y\in S$ with distinct query outcomes. For any proposed outcome
+$o$, at least one of these states is absent from $S_{j,o}$. That branch
+is a proper subset of the finite set $S$, hence has smaller cardinality.
+Define the recursion using this decreasing measure. Strong induction on
+$|S|$ identifies its base case with the constant-answer value and its
+recursive case with the Bellman equation.
+\leanproof{MonadFormal.Repair.split_branch_card_lt,MonadFormal.Repair.finiteCost_eq_optimal}
+\end{proof}
+\leandef{MonadFormal.Repair.finiteCost}
+For finite $J$ and $O$, this is a finite recursive optimization problem.
+Its constant-target test does not require searching an infinite answer
+space: it is equivalent to pairwise agreement of $r(x)$ on $S$.
+\begin{proof}
+A constant target gives pairwise agreement. Conversely, if $S$ is
+nonempty, take the target value at any member of $S$; pairwise agreement
+makes it a constant answer. If $S$ is empty, choose any member of $V$.
+\leanproof{MonadFormal.Repair.constant_iff_pairwise}
+\end{proof}
+The recurrence establishes neither a low computational complexity bound
+nor repair from unavailable measurements. It solves the declared
+exact, nondestructive, worst-case query problem.

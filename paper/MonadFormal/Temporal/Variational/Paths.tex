@@ -1,0 +1,61 @@
+% Lean module: MonadFormal.Temporal.Variational.Paths
+\subsubsection{The full admissible path class}
+\label{sec:variational-admissible}
+
+Let $\mathcal A_{a,b}$ consist of absolutely continuous functions
+$x:[0,1]\to\mathbb R$ with $x'\in L^2(\mu)$ and endpoints
+$x(0)=a$, $x(1)=b$. These are the absolutely continuous
+representatives of the endpoint-constrained one-dimensional $H^1$
+class. Define
+\[
+ J(x)=\frac12\int (x')^2\,d\mu
+      +\frac\lambda2\int\bigl(x(t+\delta)-x(t)\bigr)^2\,d\nu_\delta(t).
+\]
+Only values on $[0,1]$ enter this functional. In particular, extending
+a path outside that interval changes neither its derivative almost
+everywhere on the interval nor its shifted difference on
+$[0,1-\delta]$.
+\leandef{MonadFormal.Temporal.Variational.Interval.Admissible,MonadFormal.Temporal.Variational.Interval.pathEnergy}
+
+\begin{theorem}[Exact velocity coordinates]
+\label{thm:variational-coordinates}
+The map $f\mapsto x_f|_{[0,1]}$ is a bijection from $H$ onto
+$\mathcal A_{a,b}$. Its inverse is the $L^2$ class
+$f=x'-(b-a)$. The path energy equals the coordinate energy in
+\Cref{thm:interval-minimum}.
+\end{theorem}
+\begin{proof}
+The construction gives an admissible path by
+\Cref{lem:variational-paths}. Conversely, if $x\in\mathcal A_{a,b}$,
+then $f=x'-(b-a)$ belongs to $L^2(\mu)$. Absolute continuity and
+the fundamental theorem of calculus give, for $0\le t\le1$,
+\[
+ (Pf)(t)=x(t)-a-(b-a)t.
+\]
+At $t=1$ this is zero, so $f\in H$ and $x=x_f$ on $[0,1]$.
+If two constructed paths agree there, their derivatives agree at
+every interior point where both derivatives exist. Their velocity
+classes therefore agree almost everywhere, giving uniqueness.
+Finally, $x_f'=b-a+f$ almost everywhere identifies the kinetic
+integral, while the shifted-path integral is unchanged.
+\leanproof{MonadFormal.Temporal.Variational.Interval.unit_integral_eq,MonadFormal.Temporal.Variational.Interval.ae_mem_interior,MonadFormal.Temporal.Variational.Interval.deriv_eq_ae_of_eqOn,MonadFormal.Temporal.Variational.Interval.path_injective,MonadFormal.Temporal.Variational.Interval.path_admissible,MonadFormal.Temporal.Variational.Interval.primitive_centered_derivative,MonadFormal.Temporal.Variational.Interval.exists_unique_velocity,MonadFormal.Temporal.Variational.Interval.pathEnergy_path,MonadFormal.Temporal.Variational.Interval.pathEnergy_congr}
+\end{proof}
+
+\begin{theorem}[Unique admissible minimizing path]
+\label{thm:variational-path-minimum}
+For $0\le\delta\le1$ and $\lambda\ge0$, $J$ has a unique
+minimizer in $\mathcal A_{a,b}$.
+\end{theorem}
+\begin{proof}
+Transfer the minimizing velocity from \Cref{thm:interval-minimum}
+through the energy-preserving bijection of
+\Cref{thm:variational-coordinates}. Every admissible competitor
+has a velocity coordinate, and every minimizing path must have
+the unique minimizing coordinate. Thus uniqueness is equality
+on $[0,1]$, with no assertion about an extension outside it.
+\leanproof{MonadFormal.Temporal.Variational.Interval.exists_unique_path_minimizer}
+\end{proof}
+
+\input{MonadFormal/Temporal/Variational/Shift}
+\input{MonadFormal/Temporal/Variational/Regularity}
+\input{MonadFormal/Temporal/Variational/Euler}

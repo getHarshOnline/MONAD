@@ -1,0 +1,1 @@
+Portable profiles shared by language interfaces when a second language needs them. Nothing is implemented in this folder yet; the [library design](../docs/library-design.md) gives the plan and its prerequisites.

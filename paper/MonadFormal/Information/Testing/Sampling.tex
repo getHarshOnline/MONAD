@@ -1,0 +1,27 @@
+% Lean module: MonadFormal.Information.Testing.Sampling
+\paragraph{Concentration under independent sampling.}
+For a real statistic $f$ on the finite alphabet, put
+$S_n(f)=\sum_{i=1}^n f(X_i)$, with the coordinates independently
+distributed according to a probability law $R$.
+\leandef{MonadFormal.Information.sampleSum}
+
+\begin{lemma}[A quantitative typical set]
+\label{lem:iid-typical-set}
+Let $m=\mathbb E_Rf$ and $v=\operatorname{Var}_R(f)$.
+Then $\mathbb E S_n(f)=nm$ and
+$\operatorname{Var}(S_n(f))=nv$. For $n\ge1$ and $\varepsilon>0$,
+\[
+ R^{\otimes n}\{|S_n(f)-nm|\ge n\varepsilon\}
+ \le\frac{v}{n\varepsilon^2}.
+\]
+In particular, if $2v\le n\varepsilon^2$, the event
+$A_n=\{|S_n(f)-nm|<n\varepsilon\}$ has probability at least $1/2$.
+\end{lemma}
+\begin{proof}
+The coordinate marginals give the mean by linearity of expectation.
+Independence gives the variance sum; all moments are finite on the
+finite alphabet. Chebyshev's inequality at deviation $n\varepsilon$
+then gives $nv/(n\varepsilon)^2=v/(n\varepsilon^2)$.
+Taking the complementary event proves the last assertion.
+\leanproof{MonadFormal.Information.integral_sampleSum,MonadFormal.Information.variance_sampleSum,MonadFormal.Information.iid_deviation_le,MonadFormal.Information.iid_typical_ge_half}
+\end{proof}

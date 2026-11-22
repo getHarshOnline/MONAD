@@ -1,0 +1,5 @@
+syntax = "proto3";
+package monad;
+
+// For the messages of the observer interface: coarse-grainings, record channels and
+// resource vectors. No message is declared yet.

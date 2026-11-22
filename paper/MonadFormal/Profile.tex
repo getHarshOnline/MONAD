@@ -1,0 +1,27 @@
+% Lean module: MonadFormal.Profile
+\subsection{Protocol-record correspondence}\label{ss:profile-correspondence}
+
+Fix a carrier $X$, admitted protocol maps $T_k:X\to Z$, and
+record maps $p_i:Z\to O$. For the probabilistic profile, $O$ is
+the specified space of record distributions. Let
+$F_{k,i}=p_i\circ T_k$.
+\leandef{MonadFormal.Profile.recordFamily}
+
+\begin{proposition}[Protocol-record correspondence]
+\label[proposition]{prop:profile-correspondence}
+The fixed-context schema instantiated by these protocols and records has
+$x\approx_F y$ exactly when every admitted protocol-record pair
+assigns $x$ and $y$ the same record distribution. Any fixed decision
+rule applied to those distributions preserves their equality.
+\end{proposition}
+\begin{proof}
+Unfold the definition of $F$: its indices are pairs $(k,i)$ and its
+values are $p_i(T_k(x))$. Equality at every index is precisely the
+stated protocol-record condition. Applying a function to equal
+distributions gives equal outputs.
+\leanproof{MonadFormal.Profile.record_equivalence,MonadFormal.Profile.decision_rules_preserve_indist}
+\end{proof}
+
+For this profile, $C$ is determined by the regulator and resources,
+$X=\StateSpace$, records compose coarse-graining and the record
+channel, and protocols are those admitted by the full protocol contract.

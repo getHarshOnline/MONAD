@@ -1,0 +1,39 @@
+% Lean module: MonadFormal.Entropy
+\subsection{Fine-grained entropy conservation}
+
+Let $\rho_0:\StateSpace\to[0,\infty)$ be a measurable density and
+set $\rho_t=\rho_0\circ\Phi_{-t}$. Use $0\log0=0$ and assume
+$x\mapsto-\rho_0(x)\log\rho_0(x)$ is integrable. Define
+\begin{equation}
+  S_{\mathrm{fine}}(t)
+    =-\int_{\StateSpace}\rho_t(x)\log\rho_t(x)\,d\Measure(x).
+  \label{eq:fine-grained-entropy}
+\end{equation}
+\leandef{MonadFormal.Entropy.fine}
+
+\begin{theorem}[Fine-grained entropy conservation]\label{thm:conservation}
+If $\Phi_t$ is a measure-preserving measurable bijection with
+measurable inverse, the transported entropy integrand is integrable and
+\begin{equation}
+  S_{\mathrm{fine}}(t)=S_{\mathrm{fine}}(0).
+  \label{eq:entropy-conservation}
+\end{equation}
+\end{theorem}
+\begin{proof}
+The inverse $\Phi_{-t}$ also preserves $\Measure$. Change of variables
+therefore preserves the integral of every integrable observable $g$:
+\[
+  \int g(\Phi_{-t}(x))\,d\Measure(x)
+    =\int g(x)\,d\Measure(x).
+\]
+It also preserves integrability. Substitute
+$g(x)=-\rho_0(x)\log\rho_0(x)$.
+\leanproof{MonadFormal.Entropy.observable_conservation,MonadFormal.Entropy.fine_conservation}
+\end{proof}
+
+% monad-open: quantum-correspondence
+The integrability hypothesis makes both sides finite real entropies;
+finite reference measure alone does not supply it. No differentiable
+structure is needed. Von Neumann entropy under unitary conjugation is
+a related quantum result, not a specialization of this scalar-density
+proof; its matrix/spectral correspondence must be supplied separately.

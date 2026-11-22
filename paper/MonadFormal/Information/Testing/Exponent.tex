@@ -1,0 +1,48 @@
+% Lean module: MonadFormal.Information.Testing.Exponent
+\subsubsection{Optimal error exponent}
+\label{sec:chernoff-exponent}
+
+For $n\ge1$, define the rate
+$r_n=-\log P_{\mathrm{err}}^*(n)/n$, with $r_n=+\infty$ when
+the error is zero. Logarithms, and hence rates, are in nats.
+\leandef{MonadFormal.Information.binaryErrorRate}
+
+\begin{theorem}[Chernoff error exponent]
+\label{thm:chernoff-exponent}
+For two probability laws on a finite alphabet, independent identically
+distributed observations and fixed strictly positive priors $a,b$,
+\begin{equation}
+ \lim_{n\to\infty}-\frac1n\log P_{\mathrm{err}}^*(n)
+ =\ChernoffInfo(P,Q).
+ \label{eq:error-exponent}
+\end{equation}
+The equality holds in the extended real line. Equal priors, identical
+supports and an interior optimizing exponent are not required.
+\end{theorem}
+\begin{proof}
+If $S=\varnothing$, \Cref{prop:chernoff-support} gives zero error
+for every $n\ge1$ and $\ChernoffInfo(P,Q)=+\infty$.
+Otherwise choose $s_*$ as above. Then $z>0$, and
+\Cref{lem:chernoff-support-extension} gives
+$\ChernoffInfo(P,Q)=-\log z$.
+Put $c=\min\{a,b\}/2>0$. For each fixed $\varepsilon>0$,
+the variance condition in \Cref{thm:chernoff-converse} holds for
+all sufficiently large $n$. Its positive lower bound ensures
+that taking ordinary real logarithms is legitimate, and yields
+\[
+ -\log z\le r_n\le-\log z+\varepsilon-\frac{\log c}{n}.
+\]
+The constant term $\log c/n$ tends to zero. For any neighborhood
+of $-\log z$, first choose a smaller positive $\varepsilon$ and
+then a sufficiently large $n$; the displayed inequalities place
+$r_n$ in that neighborhood. This proves convergence and, by
+embedding the real line, the claimed extended-valued statement.
+\leanproof{MonadFormal.Information.rate_ge_of_error_le,MonadFormal.Information.rate_le_of_error_ge,MonadFormal.Information.tendsto_rate_of_exponential_bounds,MonadFormal.Information.binaryError_iid_eventually_ge,MonadFormal.Information.binaryError_iid_eventually_pos,MonadFormal.Information.chernoffInfo_eq_log_supportPartition,MonadFormal.Information.tendsto_binaryError_log_rate,MonadFormal.Information.binaryErrorRate_eq_coe,MonadFormal.Information.tendsto_binaryErrorRate}
+\end{proof}
+
+This is the classical binary-testing exponent
+\cite{chernoff1952measure,cover2006elements}. It identifies the
+exponential rate, not a finite-sample prefactor or an operational
+channel-coding rate. Fixed positive priors disappear from the limit
+because their logarithmic contribution is divided by $n$; priors
+that vanish or depend on $n$ fall outside the theorem.

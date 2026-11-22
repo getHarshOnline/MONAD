@@ -1,0 +1,45 @@
+% Lean module: MonadFormal.Temporal.Variational
+\subsection{A coercive whole-path energy}
+\label{sec:temporal-variational}
+
+Whole-path consistency is a third interpretation of temporal dependence.
+It specifies an extremum subject to boundary data, rather than an
+initial-value update rule. The following Hilbert-space result supplies
+the existence argument for the interval construction below.
+
+Let $V$ be a real Hilbert space, $W$ a real inner-product space,
+$T:V\to W$ a bounded linear operator, and $b\in W$. Put
+\[
+ E_\lambda(u)=\frac12\lVert u\rVert^2
+       +\frac\lambda2\lVert Tu+b\rVert^2,\qquad
+ B_\lambda(u,h)=\langle u,h\rangle+\lambda\langle Tu,Th\rangle.
+\]
+\leandef{MonadFormal.Temporal.Variational.energy,MonadFormal.Temporal.Variational.form}
+
+\begin{theorem}[Coercive quadratic minimization]
+\label{thm:variational-minimum}
+If $\lambda\ge0$, then $E_\lambda$ has a unique global minimizer.
+There is a stationary point $u_*$ satisfying
+\begin{equation}\label{eq:variational-weak}
+ \langle u_*,h\rangle+\lambda\langle Tu_*+b,Th\rangle=0
+ \quad\text{for every }h\in V.
+\end{equation}
+Every such point obeys the exact gap identity
+\begin{equation}\label{eq:variational-gap}
+ E_\lambda(u_*+h)-E_\lambda(u_*)
+ =\frac12\bigl(\lVert h\rVert^2+\lambda\lVert Th\rVert^2\bigr).
+\end{equation}
+\end{theorem}
+\begin{proof}
+The bounded bilinear form satisfies
+$B_\lambda(u,u)\ge\lVert u\rVert^2$.
+The functional $h\mapsto-\lambda\langle b,Th\rangle$ is bounded,
+so Lax--Milgram gives \eqref{eq:variational-weak}.
+Expand the two squared norms at $u_*+h$; the linear cross terms
+vanish by stationarity, giving \eqref{eq:variational-gap}.
+Its right-hand side is nonnegative and is zero only if $h=0$.
+Thus $u_*$ minimizes the energy, and any other minimizer equals it.
+\leanproof{MonadFormal.Temporal.Variational.form_apply,MonadFormal.Temporal.Variational.form_coercive,MonadFormal.Temporal.Variational.exists_stationary,MonadFormal.Temporal.Variational.energy_gap,MonadFormal.Temporal.Variational.minimizes_of_stationary,MonadFormal.Temporal.Variational.exists_unique_minimizer}
+\end{proof}
+
+\input{MonadFormal/Temporal/Variational/Interval}

@@ -1,0 +1,53 @@
+% Lean module: MonadFormal.Refinement
+\subsubsection{Semantic refinement versus obtainable refinement}
+
+Let $q:X\to Y$ be retained information and $r:X\to Z$ a newly
+required distinction. Define $q^+(x)=(q(x),r(x))$.
+\leandef{MonadFormal.refine}
+
+\begin{theorem}[Least common refinement]\label{thm:least-refinement}
+The map $q^+$ preserves both $q$ and $r$, and
+\[
+ q^+(x)=q^+(y)\iff q(x)=q(y)\ \text{and}\ r(x)=r(y).
+\]
+If both $q$ and $r$ factor through $s:X\to W$, then so does $q^+$.
+Thus $q^+$ is least in the order determined by factorization.
+\end{theorem}
+\begin{proof}
+The coordinate projections recover $q$ and $r$. Equality of ordered
+pairs is equality of both coordinates. If $q=g\circ s$ and
+$r=h\circ s$, then $q^+=(g,h)\circ s$.
+\leanproof{MonadFormal.refine_fibers,MonadFormal.refine_preserves,MonadFormal.refine_least}
+\end{proof}
+
+\begin{theorem}[Obtainability from declared access]\label{thm:obtainable-refinement}
+Let $A:X\to W$ describe the information actually accessible to the
+system. The refined value $q^+$ factors through $A$ if and only if
+both $q$ and $r$ factor through $A$. Moreover, deterministic
+postprocessing of $A$ cannot separate any pair that $A$ identifies.
+\end{theorem}
+\begin{proof}
+The forward implication composes the two projections with a decoder
+for $q^+$. The reverse implication is the least-refinement property.
+For the last statement, $A(x)=A(y)$ implies $h(A(x))=h(A(y))$ for
+every function $h$.
+\leanproof{MonadFormal.factors_trans,MonadFormal.refine_obtainable_iff,MonadFormal.processing_preserves_fibers}
+\end{proof}
+The definition of $q^+$ supplies no access to $r(x)$. In particular,
+the analyst's access to $x$ is not an admissible operation of the system.
+
+\begin{example}[New carrier states need not split old states]
+\label{ex:carrier-extension}
+Let $X=\{*\}$, $X'=\{*\}\times\{0,1\}$ and $e(*)=(*,0)$.
+The second-coordinate probe is constant after pullback to $X$, so
+it factors through the constant old representation. Nevertheless,
+it separates $(*,0)$ and $(*,1)$ in $X'$, and $(*,1)$ is outside
+the image of $e$.
+\end{example}
+\begin{proof}
+The pulled-back probe has value zero. The two displayed target values
+are zero and one; no image point has second coordinate one.
+\leanproof{MonadFormal.extra_bit_pullback_factors,MonadFormal.extra_bit_separates_new_states,MonadFormal.extra_state_outside_image}
+\end{proof}
+Pullback sufficiency over old states therefore does not describe all
+distinctions of an enlarged carrier.

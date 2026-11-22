@@ -1,0 +1,58 @@
+% Lean module: MonadFormal.Approximation
+\section{Approximation by statistical simulation}
+\label{sec:simulation}
+
+Exact factorization asks whether a required distinction is preserved.
+Statistical simulation asks a different question: can the retained
+experiment reproduce the distributions of another experiment well enough
+for bounded decisions? We use normalized total variation and a common
+Markov kernel. This is an instance of experiment comparison, not a new
+scalar definition of MONAD defect~\cite{carterGaussianApproximation}.
+
+Let $X,Y,Z$ be nonempty measurable spaces. Write $\mathcal P(X)$ for
+probability measures on $X$ and
+\[
+ \mathcal T(X)=\{f:X\to[0,1]:f\text{ is measurable}\},\qquad
+ d_{\mathrm{TV}}(\mu,\nu)
+ =\sup_{f\in\mathcal T(X)}\left|\int f\,d\mu-\int f\,d\nu\right|.
+\]
+All these integrals exist: $f$ is bounded and the measures are finite.
+The normalization uses $[0,1]$ tests, not $[-1,1]$ tests. A randomization
+$K:X\rightsquigarrow Y$ is a Markov kernel: $K(x,\cdot)$ is a probability
+measure and $x\mapsto K(x,B)$ is measurable for every measurable $B$.
+Denote its action on a measure by $K\mu$, its composition with $L$ by
+$LK$, and its input relabeling along a measurable map $q:Z\to X$ by
+$K\circ q$, where $(K\circ q)(z,\cdot)=K(q(z),\cdot)$.
+Its action on a test is
+\[
+ (K^*f)(x)=\int f(y)\,K(x,dy).
+\]
+\leandef{MonadFormal.Approximation.Test,MonadFormal.Approximation.tv,MonadFormal.Approximation.Randomization,MonadFormal.Approximation.Randomization.apply,MonadFormal.Approximation.Randomization.comp,MonadFormal.Approximation.Randomization.comap,MonadFormal.Approximation.Randomization.pull}
+
+\begin{theorem}[Variation bounds and Markov contraction]
+\label{thm:variation-contraction}
+Normalized total variation is symmetric, vanishes on the diagonal,
+is at most one, and satisfies the triangle inequality. Moreover,
+\[
+ d_{\mathrm{TV}}(K\mu,K\nu)\le d_{\mathrm{TV}}(\mu,\nu).
+\]
+\end{theorem}
+\begin{proof}
+Every test expectation lies in $[0,1]$, so its difference has absolute
+value at most one. Symmetry and diagonal vanishing follow from the same
+properties of absolute value. For each test, insert the intermediate
+expectation and use the triangle inequality; take the supremum.
+
+For contraction, measurability of kernel integration and the bounds on
+$f$ show that $K^*f\in\mathcal T(X)$. Kernel integration gives
+\[
+ \int f\,d(K\mu)=\int K^*f\,d\mu.
+\]
+Thus every difference tested after $K$ is already bounded by the
+supremum over tests before $K$. Taking the supremum proves contraction.
+Kernel composition likewise gives $(LK)\mu=L(K\mu)$.
+\leanproof{MonadFormal.Approximation.Test.integrable,MonadFormal.Approximation.Test.integral_bounds,MonadFormal.Approximation.test_le_tv,MonadFormal.Approximation.tv_le_one,MonadFormal.Approximation.tv_self,MonadFormal.Approximation.tv_symm,MonadFormal.Approximation.tv_triangle,MonadFormal.Approximation.Randomization.integral_apply,MonadFormal.Approximation.Randomization.apply_comp,MonadFormal.Approximation.tv_processing}
+\end{proof}
+
+\input{MonadFormal/Approximation/Events}
+\input{MonadFormal/Approximation/Simulation}

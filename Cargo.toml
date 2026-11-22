@@ -1,0 +1,5 @@
+# MONAD virtual workspace. The kernel stays at its exact path.
+# Ecosystem consumers reference MONAD/kernel by Cargo path dependency.
+[workspace]
+resolver = "2"
+members = ["kernel"]

@@ -1,0 +1,83 @@
+\documentclass{article}
+% monad-open: whole-paper-claim-review
+% Preamble order: layout, fonts, typography, mathematics, links.
+% hyperref loads last; cleveref loads after hyperref.
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{aliascnt}
+\renewcommand{\qedsymbol}{}
+% Machine-checked correspondence markers; intentionally absent from prose.
+% The formal coverage audit resolves every listed declaration in Lean.
+\newcommand{\leanproof}[1]{}
+\newcommand{\leandef}[1]{}
+\emergencystretch=3em
+\usepackage[hidelinks,pdfusetitle]{hyperref}
+\usepackage{cleveref}
+% Counter aliases share numbering while preserving the environment's reference type.
+\newtheorem{theorem}{Theorem}
+\newcommand{\newsharedtheorem}[3]{%
+  \newaliascnt{#1}{theorem}%
+  \newtheorem{#1}[#1]{#2}%
+  \aliascntresetthe{#1}%
+  \crefname{#1}{#2}{#3}%
+}
+\newsharedtheorem{proposition}{Proposition}{Propositions}
+\newsharedtheorem{lemma}{Lemma}{Lemmas}
+\newsharedtheorem{corollary}{Corollary}{Corollaries}
+\theoremstyle{definition}
+\newsharedtheorem{definition}{Definition}{Definitions}
+\newsharedtheorem{example}{Example}{Examples}
+\theoremstyle{remark}
+\newsharedtheorem{remark}{Remark}{Remarks}
+\newtheorem{question}{Question}
+\setcounter{tocdepth}{2}
+
+\title{MONAD: Minimal Ontological Notions for Axiomatic Distinction}
+\author{Harsh Joshi}
+\date{\today}
+
+% Shared definitions. Canonical copy; sibling papers carry copies of its definitions file.
+\input{shared/monad/definitions}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+MONAD seeks a calculus of endogenous distinguishability: how a
+mathematical system can define, compress, transport, and revise its own
+space of distinctions.
+The set-based starting point identifies exact sufficient quotients and
+the obstruction to nontrivial compression under unrestricted future
+distinctions. Resource-indexed continuation, obtainable repair,
+statistical simulation and three distinct forms of temporal dependence
+make the assumptions behind these comparisons explicit. A fixed-context
+observer profile then connects state, records and intervention influence
+to entropy and information bounds. The proved constructions are bounded
+specializations; a general calculus of endogenous context change remains
+the research problem.
+\end{abstract}
+
+\tableofcontents
+\clearpage
+
+\input{sections/00_problem_statement}
+\input{MonadFormal/Budget}
+\input{MonadFormal/Abstraction}
+\input{MonadFormal/Repair}
+\input{MonadFormal/Approximation}
+\input{MonadFormal/Witnesses}
+\input{MonadFormal/Temporal}
+\input{sections/01_introduction}
+\input{sections/02_state_space}
+\input{sections/03_observer_interface}
+\input{sections/04_operational_causality}
+\input{sections/05_entropy_arrows}
+\input{sections/06_information_bounds}
+
+\bibliographystyle{plain}
+\bibliography{MONAD}
+
+\end{document}

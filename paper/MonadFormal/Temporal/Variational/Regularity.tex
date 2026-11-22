@@ -1,0 +1,55 @@
+% Lean module: MonadFormal.Temporal.Variational.Regularity
+\subsubsection{Regularity from the weak equation}
+\label{sec:variational-regularity}
+
+\begin{lemma}[Mean-zero orthogonality and integration by parts]
+\label[lemma]{lem:variational-orthogonality}
+If $k\in V$ is orthogonal to every $h\in H$, then $k$ is
+constant almost everywhere. For $g\in V$ and $h\in H$,
+\[
+ \langle Pg,h\rangle_{L^2(\mu)}
+ =-\int g(t)(Ph)(t)\,d\mu(t).
+\]
+Here the bounded continuous function $Pg$ is also regarded as an
+element of $V$.
+\end{lemma}
+\begin{proof}
+Put $m=\int k\,d\mu$. Since $\mu([0,1])=1$, the function
+$h=k-m$ belongs to $H$. Constants are orthogonal to $H$, so
+$\lVert h\rVert_2^2=\langle k-m,h\rangle=0$ and $k=m$
+almost everywhere. For the second identity, $Pg$ and $Ph$ are
+absolutely continuous, with derivatives $g$ and $h$ almost
+everywhere. Integration by parts has zero boundary term because
+$Ph(0)=Ph(1)=0$.
+\leandef{MonadFormal.Temporal.Variational.Interval.primitiveLp}
+\leanproof{MonadFormal.Temporal.Variational.Interval.endpoint_const,MonadFormal.Temporal.Variational.Interval.const_inner_variation,MonadFormal.Temporal.Variational.Interval.eq_const_of_orthogonal,MonadFormal.Temporal.Variational.Interval.primitiveLp_ae,MonadFormal.Temporal.Variational.Interval.primitive_pairing}
+\end{proof}
+
+\begin{theorem}[Weak equation determines an absolutely continuous velocity]
+\label{thm:variational-regularity}
+Let $f\in H$, $g\in V$ and $\lambda\in\mathbb R$ satisfy
+\[
+ \langle f,h\rangle+\lambda\int g(t)(Ph)(t)\,d\mu(t)=0
+ \qquad(h\in H).
+\]
+There is a constant $c$ such that $f=c+\lambda Pg$ almost
+everywhere. Consequently, $x_f$ has a continuous velocity
+\[
+ v(t)=b-a+c+\lambda(Pg)(t),
+\]
+which is absolutely continuous on $[0,1]$. The equality
+$x_f'(t)=v(t)$ holds at every interior point, and
+$v'=x_f''=\lambda g$ almost everywhere on $[0,1]$.
+\end{theorem}
+\begin{proof}
+By \Cref{lem:variational-orthogonality}, the weak equation says
+that $f-\lambda Pg$ is orthogonal to $H$, hence is constant.
+The primitive $Pg$ is continuous and absolutely continuous, so
+the displayed formula gives the same regularity for $v$.
+Integrating the continuous representative $c+\lambda Pg$ of $f$
+upgrades the derivative of $Pf$ to every interior point by the
+fundamental theorem of calculus. Finally $(Pg)'=g$ almost
+everywhere. Since $x_f'=v$ on the open interval, their derivatives
+also agree wherever $v'$ exists there.
+\leanproof{MonadFormal.Temporal.Variational.Interval.weak_velocity_representation,MonadFormal.Temporal.Variational.Interval.primitive_hasDerivAt_of_continuous,MonadFormal.Temporal.Variational.Interval.weak_path_regularity,MonadFormal.Temporal.Variational.Interval.second_derivative_ae}
+\end{proof}

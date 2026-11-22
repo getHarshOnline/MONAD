@@ -1,0 +1,52 @@
+% Lean module: MonadFormal.Information.Testing.Conditional
+\subsubsection{Testing against a conditioned law}
+\label{sec:testing-conditioning}
+
+Let $P,Q$ be probability laws on an arbitrary measurable space $X$,
+and let $a=\pi(\{0\})$, $b=\pi(\{1\})$ be the prior probabilities.
+An event test decides $P$ on a measurable set $A$ and $Q$ on $A^c$;
+its risk is $aP(A^c)+bQ(A)$.
+\leandef{MonadFormal.Information.eventTest}
+
+\begin{theorem}[Conditioning error formula]
+\label{thm:conditioning-error}
+Suppose $P(A)=1$ and $Q|_A=qP$, where $q=Q(A)$ and $Q|_A$
+denotes restriction, not normalization. Then the optimal error over
+all randomized tests is
+\[
+ e_\pi(P,Q)=\min\{a,bq\}.
+\]
+No positivity assumption on $a$, $b$ or $q$ is required.
+\end{theorem}
+\begin{proof}
+Always deciding $Q$ has risk $a$, and the event test has risk $bq$.
+These give the upper bound. For any Markov decision kernel $D$, put
+$r=(DP)(\{0\})$. The domination $qP=Q|_A\le Q$ implies
+$q r\le(DQ)(\{0\})$. Hence
+\[
+ R_\pi(D)=a(1-r)+b(DQ)(\{0\})
+ \ge a(1-r)+bqr\ge\min\{a,bq\}.
+\]
+Taking the infimum gives the reverse bound.
+\leanproof{MonadFormal.Information.eventTest_risk,MonadFormal.Information.binaryError_le_prior_false,MonadFormal.Information.binaryError_eq_min_of_restrict}
+\end{proof}
+
+\begin{corollary}[Independent repetitions of a conditioning event]
+\label{cor:conditioning-iid}
+Under the same hypotheses, for every integer $n\ge0$,
+\[
+ e_\pi(P^{\otimes n},Q^{\otimes n})=\min\{a,bq^n\}.
+\]
+\end{corollary}
+\begin{proof}
+The event $A^n$ has $P^{\otimes n}$-mass one and
+$Q^{\otimes n}$-mass $q^n$. On measurable rectangles, independent
+products give
+\[
+ Q^{\otimes n}|_{A^n}=(Q|_A)^{\otimes n}
+ =(qP)^{\otimes n}=q^n P^{\otimes n}.
+\]
+Uniqueness of finite product measures extends this identity to
+all measurable events. Apply \Cref{thm:conditioning-error}.
+\leanproof{MonadFormal.Information.iid_restrict_eq_smul,MonadFormal.Information.binaryError_iid_eq_min_of_restrict}
+\end{proof}

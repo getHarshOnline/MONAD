@@ -1,0 +1,10 @@
+[package]
+name = "monad-kernel"
+version = "0.1.0"
+edition = "2021"
+description = "The typed vocabulary of state, observation, resource and causal record that the Causality research kernels share"
+license = "AGPL-3.0-or-later"
+
+[dependencies]
+
+[dev-dependencies]

@@ -1,0 +1,100 @@
+% Lean module: MonadFormal.Information.Testing.Chernoff
+\subsubsection{Chernoff information and finite-sample bounds}
+\label{sec:chernoff-bounds}
+
+Keep the finite alphabet and prior of \Cref{sec:binary-testing}.
+For $0<s<1$, define the Chernoff coefficient and information by
+\begin{equation}
+ Z_s(P,Q)=\sum_x p_x^s q_x^{1-s},\qquad
+ \ChernoffInfo(P,Q)=-\log\inf_{0<s<1}Z_s(P,Q).
+ \label{eq:chernoff-info}
+\end{equation}
+The logarithm is extended by $\log0=-\infty$, so the information
+may be $+\infty$. The open interval avoids a $0^0$ convention;
+endpoint infima are approached from within that interval.
+\leandef{MonadFormal.Information.chernoffCoeff,MonadFormal.Information.chernoffInfo}
+
+\begin{lemma}[Bounds on the coefficient]
+\label{lem:chernoff-coefficient}
+For $0<s<1$,
+\[
+ \sum_x\min\{p_x,q_x\}\le Z_s(P,Q)\le1,
+ \qquad Z_s(P,P)=1.
+\]
+\end{lemma}
+\begin{proof}
+For nonnegative finite masses $u,v$,
+\[
+ \min\{u,v\}\le u^s v^{1-s}\le su+(1-s)v.
+\]
+For the first inequality, if $u\le v$, then
+$u=u^su^{1-s}\le u^sv^{1-s}$; the other ordering is symmetric.
+The second inequality is the weighted arithmetic--geometric mean
+inequality. Summing and using $\sum_xp_x=\sum_xq_x=1$ proves the
+bounds. For identical laws, each summand is $p_x$, including when
+$p_x=0$.
+\leanproof{MonadFormal.Information.min_le_geometric,MonadFormal.Information.geometric_le_arithmetic,MonadFormal.Information.overlap_le_chernoffCoeff,MonadFormal.Information.chernoffCoeff_le_one,MonadFormal.Information.chernoffCoeff_self}
+\end{proof}
+
+For $n$ independent observations, let $P^{\otimes n}$ denote the
+probability law on $X^n$ with mass
+$P^{\otimes n}(\{x\})=\prod_{i=1}^n p_{x_i}$. Define
+$P_{\mathrm{err}}^*(n)=e_\pi(P^{\otimes n},Q^{\otimes n})$.
+\leandef{MonadFormal.Information.iidLaw,MonadFormal.Information.iidLaw_singleton,MonadFormal.Information.iidLaw_real_singleton}
+
+\begin{theorem}[Finite-sample Chernoff bound]
+\label{thm:chernoff-finite}
+For every $n\ge0$ and $0<s<1$,
+\[
+ P_{\mathrm{err}}^*(n)\le a^s b^{1-s}Z_s(P,Q)^n.
+\]
+The bound retains the prior factor and permits zero masses in either
+hypothesis or the prior.
+\end{theorem}
+\begin{proof}
+By \Cref{thm:binary-bayes-error} and the first inequality in
+\Cref{lem:chernoff-coefficient},
+\[
+ e_\pi(P,Q)
+ \le\sum_x(ap_x)^s(bq_x)^{1-s}
+ =a^s b^{1-s}Z_s(P,Q).
+\]
+Independence gives the exact product identity
+\[
+ \begin{aligned}
+ Z_s(P^{\otimes n},Q^{\otimes n})
+ &=\sum_{x\in X^n}\prod_{i=1}^n p_{x_i}^s q_{x_i}^{1-s}\\
+ &=\prod_{i=1}^n\sum_{x_i\in X}p_{x_i}^s q_{x_i}^{1-s}
+ =Z_s(P,Q)^n.
+ \end{aligned}
+\]
+Apply the one-observation bound to the product laws.
+\leanproof{MonadFormal.Information.binaryError_le_chernoff,MonadFormal.Information.chernoffCoeff_iidLaw,MonadFormal.Information.binaryError_iid_le}
+\end{proof}
+
+\begin{proposition}[Support and degenerate cases]
+\label{prop:chernoff-support}
+Chernoff information is nonnegative, and
+$\ChernoffInfo(P,P)=0$. Moreover,
+\[
+ \ChernoffInfo(P,Q)=+\infty
+ \quad\Longleftrightarrow\quad
+ \forall x\in X,\ p_x=0\ \text{or}\ q_x=0.
+\]
+For such disjoint supports, $P_{\mathrm{err}}^*(n)=0$ for every
+$n\ge1$, for any prior.
+\end{proposition}
+\begin{proof}
+The upper coefficient bound and the identical-law identity in
+\Cref{lem:chernoff-coefficient} give nonnegativity and
+$\ChernoffInfo(P,P)=0$.
+For any $0<s<1$, a summand $p_x^sq_x^{1-s}$ vanishes exactly when
+one of its masses vanishes. Thus disjoint supports give $Z_s=0$.
+Conversely, the uniform lower bound
+$\sum_x\min\{p_x,q_x\}\le Z_s$ also bounds the infimum from below.
+If that infimum is zero, the nonnegative finite sum is zero, so every
+$\min\{p_x,q_x\}$ is zero. This proves the support equivalence,
+including possible limiting exponents. Finally use
+\Cref{thm:chernoff-finite} with $s=1/2$ and $n\ge1$.
+\leanproof{MonadFormal.Information.chernoffCoeff_eq_zero_iff,MonadFormal.Information.iInf_chernoffCoeff_eq_zero_iff,MonadFormal.Information.chernoffInfo_nonneg,MonadFormal.Information.chernoffInfo_self,MonadFormal.Information.chernoffInfo_eq_top_iff,MonadFormal.Information.binaryError_iid_eq_zero_of_disjoint}
+\end{proof}

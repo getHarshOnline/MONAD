@@ -1,0 +1,85 @@
+% Lean module: MonadFormal.Information.Likelihood
+\subsection{Likelihoods under input coarse-graining}
+\label{sec:input-likelihood}
+
+Let $X,M,Y$ be measurable spaces, $q:X\to M$ measurable,
+$\mu\in\mathcal P(X)$, and $K,L:M\rightsquigarrow Y$ Markov
+channels. Put $\lambda=q_*\mu$ and $\widehat q(x,y)=(q(x),y)$.
+The two channels define pairs of joint laws
+\[
+ \rho_X=\mu\otimes(K\circ q),\quad
+ \sigma_X=\mu\otimes(L\circ q),\qquad
+ \rho_M=\lambda\otimes K,\quad
+ \sigma_M=\lambda\otimes L.
+\]
+Here the subscripts identify the input carrier, not a marginal.
+
+\begin{lemma}[Pullback of a joint density]
+\label{lem:input-density}
+The joint laws satisfy $\widehat q_*\rho_X=\rho_M$ and
+$\widehat q_*\sigma_X=\sigma_M$. If a measurable
+$f:M\times Y\to[0,+\infty]$ satisfies $\rho_M=f\sigma_M$, then
+\[
+ \rho_X=(f\circ\widehat q)\sigma_X.
+\]
+\end{lemma}
+\begin{proof}
+For a measurable rectangle $A\times B\subseteq M\times Y$,
+\[
+ (\widehat q_*\rho_X)(A\times B)
+ =\int_{q^{-1}(A)}K(q(x),B)\,d\mu(x)
+ =\int_A K(m,B)\,d\lambda(m).
+\]
+This proves the first pushforward identity; replace $K$ by $L$ for
+the second. Hence $(f\circ\widehat q)\sigma_X$ has the same finite
+total mass as $f\sigma_M=\rho_M$.
+
+Fix a measurable $B\subseteq Y$. The density identity, tested on
+every measurable input set $A$, gives
+\[
+ \int_A\int_B f(m,y)\,L(m,dy)\,d\lambda(m)
+ =\int_A K(m,B)\,d\lambda(m).
+\]
+Uniqueness of nonnegative densities therefore gives
+\[
+ \int_B f(m,y)\,L(m,dy)=K(m,B)
+ \quad\text{for $\lambda$-almost every $m$}.
+\]
+Pull this equality back through $q$ and integrate over an arbitrary
+measurable subset of $X$. The resulting equality on rectangles proves
+the claimed identity between finite measures. The exceptional set may
+depend on $B$; no simultaneous conditional-density identity is assumed.
+\leanproof{MonadFormal.Information.map_input_joint,MonadFormal.Information.withDensity_input_joint}
+\end{proof}
+
+\begin{theorem}[Relative entropy under input coarse-graining]
+\label{thm:input-relative-entropy}
+On arbitrary measurable carriers,
+\[
+ D_{\mathrm{KL}}(\rho_X\Vert\sigma_X)
+ =D_{\mathrm{KL}}(\rho_M\Vert\sigma_M).
+\]
+\end{theorem}
+\begin{proof}
+Data processing under $\widehat q$ gives the inequality from right
+to left. If $\rho_M\not\ll\sigma_M$, its relative entropy is
+$+\infty$, so that inequality already forces equality.
+
+Otherwise take $f=d\rho_M/d\sigma_M$.
+By \Cref{lem:input-density}, $\rho_X\ll\sigma_X$ with density
+$f\circ\widehat q$. For $z\ge0$, put
+$\phi(z)=z\log z+1-z$, with $0\log0=0$.
+The nonnegative-integral formula for relative entropy yields
+\[
+ \begin{aligned}
+ D_{\mathrm{KL}}(\rho_X\Vert\sigma_X)
+ &=\int\phi(f\circ\widehat q)\,d\sigma_X\\
+ &=\int\phi(f)\,d\sigma_M
+ =D_{\mathrm{KL}}(\rho_M\Vert\sigma_M).
+ \end{aligned}
+\]
+The Radon--Nikodym densities are finite almost everywhere; the
+integrals may still be infinite. No integrability assumption or
+reverse conditional kernel is needed.
+\leanproof{MonadFormal.Information.klDiv_input_joint}
+\end{proof}

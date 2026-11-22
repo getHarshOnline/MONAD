@@ -1,0 +1,54 @@
+% Lean module: MonadFormal.Quotient
+\subsubsection{Postulate II: anticipatory compression}\label{ss:anticipatory-compression}\label{ss:relative-compression}
+
+The requirement is to preserve the distinctions admitted continuations
+can demand. For a declared family, its exact set-based realization is a
+sufficient representation.
+
+A map $f:X\to O$ \emph{factors through} $q:X\to Y$ if there is
+$\bar f:Y\to O$ with $f=\bar f\circ q$. A representation $q$ is
+sufficient for $F$ if every probe factors through it:
+\begin{equation}
+  \forall i\in I\;\exists\bar f_i:Y\to O_i,
+  \qquad f_i=\bar f_i\circ q.\label{eq:sufficient}
+\end{equation}
+\leandef{MonadFormal.Factors,MonadFormal.Sufficient}
+This is exact preservation of declared distinctions. It is not, by itself,
+minimal storage, efficient evaluation or a physically obtainable encoding.
+
+\begin{theorem}[Coarsest sufficient quotient]\label{thm:coarsest-quotient}
+Let $Q_F=X/{\approx_F}$ and $q_F(x)=[x]_F$. Then $q_F$ is
+surjective and sufficient, and $q_F(x)=q_F(y)$ exactly when
+$x\approx_F y$. For every sufficient surjection $q:X\to Y$, there
+is a unique $h:Y\to Q_F$ such that $q_F=h\circ q$.
+\end{theorem}
+\begin{proof}
+Define $\bar f_i([x]_F)=f_i(x)$. Observational equivalence makes
+this independent of the representative, so each probe descends to
+$Q_F$. Every quotient class has a representative. Conversely,
+sufficiency implies that $q(x)=q(y)$ forces $f_i(x)=f_i(y)$ for
+every $i$, hence $q_F(x)=q_F(y)$. Define $h(q(x))=q_F(x)$.
+The preceding implication makes this well-defined, and surjectivity
+of $q$ makes it both everywhere defined and unique.
+\leanproof{MonadFormal.toQuot_sufficient,MonadFormal.toQuot_eq_iff,MonadFormal.toQuot_surjective,MonadFormal.quotient_universal}
+\end{proof}
+
+\begin{theorem}[Unique descent and relabeling]\label{thm:unique-descent}
+If $q:X\to Y$ is surjective and $f:X\to O$ is constant on its
+fibers, then $f=\bar f\circ q$ for a unique $\bar f:Y\to O$.
+If surjections $q:X\to Y$ and $r:X\to Z$ have the same fibers,
+their values differ only by a bijection $h:Y\to Z$ satisfying
+$r=h\circ q$.
+\end{theorem}
+\begin{proof}
+For each $y$, choose $x$ with $q(x)=y$ and set $\bar f(y)=f(x)$.
+Fiber constancy removes dependence on the choice; evaluating any
+other candidate at $q(x)$ proves uniqueness. Apply this construction
+to $r$ through $q$, and to $q$ through $r$. The two resulting maps
+compose to the identity on the images, which are the whole codomains.
+\leanproof{MonadFormal.unique_descent,MonadFormal.same_fibers_relabeling}
+\end{proof}
+
+No finiteness hypothesis is needed. The construction can be
+noncomputable: existence of a quotient is not an algorithm for
+recognizing its classes.

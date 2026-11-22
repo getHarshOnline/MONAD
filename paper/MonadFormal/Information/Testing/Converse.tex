@@ -1,0 +1,46 @@
+% Lean module: MonadFormal.Information.Testing.Converse
+\subsubsection{Matching lower bound}
+\label{sec:chernoff-converse}
+
+\begin{theorem}[Finite-sample Chernoff converse]
+\label{thm:chernoff-converse}
+Suppose $S\ne\varnothing$. Choose any minimizer $s_*$ from
+\Cref{lem:chernoff-support-extension}, and retain
+$z=\overline Z_{s_*}$ and $R=R_{s_*}$. For $\varepsilon>0$ and
+$n\ge1$ satisfying $2\operatorname{Var}_R(\ell)\le n\varepsilon^2$,
+\[
+ \frac{\min\{a,b\}}2\,z^n e^{-n\varepsilon}
+ \le P_{\mathrm{err}}^*(n)\le z^n.
+\]
+The priors may be zero in this inequality, though a positive lower
+bound requires both to be positive.
+\end{theorem}
+\begin{proof}
+For an interior exponent $s$, \Cref{thm:chernoff-finite} and
+$a^sb^{1-s}\le1$ give $P_{\mathrm{err}}^*(n)\le\overline Z_s^n$.
+Continuity extends this bound to $s=0,1$, and hence to $s_*$.
+
+For the lower bound, let $L=S_n(\ell)$ and $m=\mathbb E_R\ell$.
+By \Cref{lem:iid-typical-set},
+$R^{\otimes n}(A_n)\ge1/2$ for
+$A_n=\{|L-nm|<n\varepsilon\}$.
+On this event the directional conditions give
+\[
+ (1-s_*)L\ge-n\varepsilon,\qquad -s_*L\ge-n\varepsilon.
+\]
+Indeed, the mean contributions $n(1-s_*)m$ and $-ns_*m$
+are nonnegative; the remaining deviations have magnitude at most
+$n\varepsilon$, since $0\le s_*\le1$.
+Multiplying the one-observation inequalities in
+\Cref{lem:chernoff-tilt-conditions} therefore gives, for $x\in A_n$,
+\[
+ \begin{aligned}
+ \min\{aP^{\otimes n}(\{x\}),bQ^{\otimes n}(\{x\})\}
+ &\ge \min\{a,b\}\,R^{\otimes n}(\{x\})z^n e^{-n\varepsilon}.
+ \end{aligned}
+\]
+Sum over $A_n$ and use the nonnegativity of the remaining overlap
+terms in \Cref{thm:binary-bayes-error}. The resulting factor
+$R^{\otimes n}(A_n)\ge1/2$ proves the claim.
+\leanproof{MonadFormal.Information.binaryError_iid_le_supportPartition,MonadFormal.Information.iid_likelihood_le,MonadFormal.Information.typical_likelihood_exponents,MonadFormal.Information.binaryError_lower_bound,MonadFormal.Information.binaryError_iid_ge_tilted}
+\end{proof}

@@ -1,0 +1,43 @@
+% Lean module: MonadFormal.Information.Testing
+\subsection{Optimal binary testing}
+\label{sec:binary-testing}
+
+Let $P,Q$ be probability laws on a finite alphabet $X$, equipped with
+all subsets as measurable sets. Write $p_x=P(\{x\})$ and
+$q_x=Q(\{x\})$. Hypotheses $0$ and $1$ generate $P$ and $Q$,
+respectively. A prior $\pi$ has masses $a=\pi(\{0\})$ and
+$b=\pi(\{1\})$, where $a,b\ge0$ and $a+b=1$.
+
+A randomized test is a Markov kernel $D:X\rightsquigarrow\{0,1\}$.
+With unit loss for an incorrect decision, its Bayes risk and the
+optimal error are
+\[
+ R_\pi(D;P,Q)
+ =a\int D(x,\{1\})\,dP(x)+b\int D(x,\{0\})\,dQ(x),
+ \qquad
+ e_\pi(P,Q)=\inf_D R_\pi(D;P,Q).
+\]
+The infimum is over all randomized tests, not only deterministic
+decision rules.
+\leandef{MonadFormal.Information.binaryChannel,MonadFormal.Information.binaryLoss,MonadFormal.Information.binaryError}
+
+\begin{theorem}[Optimal binary Bayes error]
+\label{thm:binary-bayes-error}
+The optimal error is
+\[
+ e_\pi(P,Q)=\sum_{x\in X}\min\{ap_x,bq_x\}.
+\]
+It is attained by choosing hypothesis $1$ when $ap_x\le bq_x$ and
+hypothesis $0$ otherwise; this convention assigns ties to hypothesis $1$.
+\end{theorem}
+\begin{proof}
+Put $d_x=D(x,\{1\})$, so $D(x,\{0\})=1-d_x$. Expanding the
+integrals gives
+\[
+ R_\pi(D;P,Q)=\sum_x\bigl(ap_xd_x+bq_x(1-d_x)\bigr).
+\]
+Each summand is at least $\min\{ap_x,bq_x\}$, since $0\le d_x\le1$.
+The stated deterministic rule achieves equality in every summand.
+It therefore attains the infimum, and randomization cannot improve it.
+\leanproof{MonadFormal.Information.binary_avgRisk,MonadFormal.Information.binary_avgRisk_finite,MonadFormal.Information.likelihoodTest,MonadFormal.Information.likelihoodTest_risk,MonadFormal.Information.binaryError_eq_overlap,MonadFormal.Information.binaryError_toReal}
+\end{proof}

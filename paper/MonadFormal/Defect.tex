@@ -1,0 +1,16 @@
+% Lean module: MonadFormal.Defect
+\subsubsection{Compression-openness compatibility}
+
+\begin{theorem}[Empty extension defect]\label{thm:empty-defect}
+For a target probe family $F'$ and transport $e:X\to X'$, the
+extension defect $\ExtDefect(e,q)$ is empty if and only if $q$ is
+sufficient for the pulled-back family $(f'_i\circ e)_i$.
+\end{theorem}
+\begin{proof}
+By definition a probe belongs to the defect exactly when its
+pullback fails to factor through $q$. Emptiness says that every
+pullback factors through $q$, which is the definition of sufficiency.
+\leanproof{MonadFormal.defectEmpty_iff_sufficient}
+\end{proof}
+This equivalence is a diagnostic baseline, not a construction of an
+obtainable refinement or a bound on its cost.

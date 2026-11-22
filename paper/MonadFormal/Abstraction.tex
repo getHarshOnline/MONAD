@@ -1,0 +1,49 @@
+% Lean module: MonadFormal.Abstraction
+\subsection{Exact correspondence with partition abstraction}
+
+The budgeted relation is not automatically new mathematics. For
+partition abstraction, the correspondence below is exact.
+
+For $q:X\to Y$ and $S\subseteq X$, set
+$\alpha_q(S)=q[S]$, $\gamma_q(U)=q^{-1}[U]$ and
+$\operatorname{Sat}_q(S)=\gamma_q\alpha_q(S)$.
+For an action $T:X\to X$, write $\operatorname{Post}_T(S)=T[S]$.
+\leandef{MonadFormal.saturate,MonadFormal.abstractPost}
+
+\begin{theorem}[Partition backward-completeness criterion]
+\label{thm:partition-completeness}
+For $q:X\to Y$, $r:X\to Z$ and $T:X\to X$, the equality
+\[
+ \alpha_r\operatorname{Post}_T(S)
+  =\alpha_r\operatorname{Post}_T\operatorname{Sat}_q(S)
+ \quad\text{for every }S\subseteq X
+\]
+holds if and only if
+$q(x)=q(y)\Rightarrow r(Tx)=r(Ty)$ for all $x,y$.
+\end{theorem}
+\begin{proof}
+For necessity, take $S=\{x\}$ and $q(x)=q(y)$.
+Then $y\in\operatorname{Sat}_q(S)$; equality of the two images
+forces $r(Ty)=r(Tx)$. For sufficiency, $S\subseteq
+\operatorname{Sat}_q(S)$ gives one inclusion. For the other, every
+$y$ in the saturation shares a $q$-fiber with some $x\in S$.
+The assumed fiber condition gives $r(Ty)=r(Tx)$.
+\leanproof{MonadFormal.backward_complete_iff}
+\end{proof}
+
+\begin{corollary}[Budgeted backward completeness]
+\label{cor:budget-completeness}
+For an affordable action $a$, the preceding criterion holds with
+$q=q_b$, $r=q_{b-c(a)}$ and $T=T_a$, where $q_b$ is the quotient
+of \eqref{eq:budget-equivalence}.
+\end{corollary}
+\begin{proof}
+Equality of $q_b$ values is equivalence at budget $b$. The residual-budget
+law gives equivalence of the images at budget $b-c(a)$, which is equality
+of their residual quotient values. Apply the criterion.
+\leanproof{MonadFormal.budget_backward_complete,MonadFormal.Budget.indist_iff_family}
+\end{proof}
+This is an exact collision with the partition/powerset form of
+backward completeness~\cite{giacobazzi2000making}. It does not
+identify every abstract domain with a partition, nor establish an
+optimal resource-bounded repair procedure.

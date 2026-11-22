@@ -1,0 +1,13 @@
+% Lean module: MonadFormal.NoGo
+\begin{theorem}[Universal compression obstruction]\label[theorem]{prop:no-go}
+Let $F$ jointly separate $X$: for any $x\ne y$, some probe has
+$f_i(x)\ne f_i(y)$. Every representation sufficient for $F$ is
+injective. In particular, the conclusion applies when the probes
+are composites of admitted future extensions and subsequent tests.
+\end{theorem}
+\begin{proof}
+Suppose $q(x)=q(y)$. For every $i$, sufficiency supplies
+$f_i=\bar f_i\circ q$, so $f_i(x)=f_i(y)$. Joint separation
+therefore forces $x=y$.
+\leanproof{MonadFormal.no_go}
+\end{proof}

@@ -1,0 +1,38 @@
+% Lean module: MonadFormal.Temporal.Variational.Shift
+\subsubsection{The shifted-difference adjoint}
+\label{sec:variational-shift}
+
+For $0\le\delta\le1$, define the nonlocal force
+\begin{equation}\label{eq:variational-force}
+ G_\delta[x](t)
+ =\mathbf1_{[\delta,1]}(t)\bigl(x(t)-x(t-\delta)\bigr)
+  -\mathbf1_{[0,1-\delta]}(t)\bigl(x(t+\delta)-x(t)\bigr).
+\end{equation}
+The indicators are part of the operator. They exclude a shifted
+neighbour that lies outside the interval; no periodic or exterior
+boundary value is supplied.
+\leandef{MonadFormal.Temporal.Variational.Interval.shiftForce}
+
+\begin{lemma}[Shifted pairing with its boundary supports]
+\label[lemma]{lem:shift-pairing}
+For continuous real functions $x,h$,
+$G_\delta[x]\in L^2(\mu)$ and
+\[
+ \int G_\delta[x](t)h(t)\,d\mu(t)
+ =\int\bigl(x(t+\delta)-x(t)\bigr)
+          \bigl(h(t+\delta)-h(t)\bigr)\,d\nu_\delta(t).
+\]
+\end{lemma}
+\begin{proof}
+Continuous functions are bounded on $[0,1]$, so the two restricted
+differences are square-integrable. Split the product on the right.
+In the term containing $h(t+\delta)$, set $s=t+\delta$:
+\[
+ \int_0^{1-\delta}\!\bigl(x(t+\delta)-x(t)\bigr)h(t+\delta)\,dt
+ =\int_\delta^1\!\bigl(x(s)-x(s-\delta)\bigr)h(s)\,ds.
+\]
+The other term remains on $[0,1-\delta]$. Writing both as
+integrals on $[0,1]$ introduces precisely the two indicators in
+\eqref{eq:variational-force}. Endpoints have Lebesgue measure zero.
+\leanproof{MonadFormal.Temporal.Variational.Interval.continuous_memLp_unit,MonadFormal.Temporal.Variational.Interval.shiftForce_memLp,MonadFormal.Temporal.Variational.Interval.shifted_pairing,MonadFormal.Temporal.Variational.Interval.unit_integral_eq_interval,MonadFormal.Temporal.Variational.Interval.unit_integral_indicator,MonadFormal.Temporal.Variational.Interval.shiftForce_pairing}
+\end{proof}

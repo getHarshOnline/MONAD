@@ -1,0 +1,56 @@
+\section{A fixed-context observer profile}\label{sec:introduction}
+
+The preceding sections isolate several pressures one at a time:
+bounded continuation, obtainable repair, approximation, separating
+counterexamples, and temporal dependence. MONAD-FORC now freezes a
+single context and asks what follows when state, resources, records,
+interventions, and information bounds must coexist.
+
+MONAD-FORC~0.2 is that fixed-context profile. Its state, observation,
+intervention-influence, entropy, and information structures
+instantiate part of the programme of \Cref{sec:problem-statement}
+without identifying the programme with one observer model.
+
+The profile begins with a specific mathematical commitment: a regulated closed-world state space
+$\StateSpace$ equipped with a reference measure $\Measure$ and invertible,
+measure-preserving evolution $\Evolution$
+(\Cref{sec:state-space}). With the stated integrability condition,
+fine-grained entropy is conserved; this baseline supplies no intrinsic
+thermodynamic arrow.
+
+The observer interface (\Cref{sec:observer}) introduces explicit
+information-losing operations even though the closed baseline evolution
+is reversible: a coarse-graining map
+$\CoarseGrain$ and a noisy record channel $\RecordChannel$, both indexed by a
+finite resource vector $\ResourceVec$.  The loss channels are explicit
+rather than exclusive: an allowed operation need not be invertible, and
+an injective coarse-graining loses nothing.  The set of allowed operations
+$\AllowedOps$ is also resource-bounded.
+
+Operational causality (\Cref{sec:operational-causality}) is then
+captured by resource-indexed detectable intervention influence
+$\DirectInfluence$: event $A$ detectably influences event $B$ when an
+allowed intervention on $A$ produces a detectable change in the
+reliable-record distribution of $B$, where detectability is measured by
+a divergence $\Distinguishability$ exceeding a threshold $\eta$.  The
+relation is not assumed to be a preorder; transitivity fails in a
+finite worked model (\Cref{sec:finite-model}).
+
+\Cref{sec:entropy-arrows} addresses entropy and thermodynamic arrows.
+Macro-entropy is a functional of the chosen coarse-graining, and monotonic
+increase is \emph{not} automatic from reversibility alone; it requires
+additional boundary-condition and typicality assumptions.
+
+Finally, \Cref{sec:information-bounds} develops information processing,
+single-letter capacity and binary testing. The finite-alphabet Chernoff
+exponent, moving-support example and scalar local distance expansions
+have separate hypotheses. The operational coding interpretation is
+distinguished from the single-letter capacity functional.
+
+Together, these five layers (state space, observer, causality, entropy
+arrows, and information bounds) form MONAD-FORC~0.2.  They do not form
+MONAD itself: the profile is one fixed-context instance of the
+programme of \Cref{sec:problem-statement}.  The correspondence is
+stated next.
+
+\input{MonadFormal/Profile}

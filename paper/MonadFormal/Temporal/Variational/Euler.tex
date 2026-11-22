@@ -1,0 +1,43 @@
+% Lean module: MonadFormal.Temporal.Variational.Euler
+\subsubsection{The nonlocal Euler equation}
+\label{sec:variational-euler}
+
+\begin{theorem}[Nonlocal Euler equation for the minimizing path]
+\label{thm:nonlocal-euler}
+Let $0\le\delta\le1$ and $\lambda\ge0$. The unique admissible
+minimizer $x_*$ has a continuous interior velocity with an
+absolutely continuous extension to $[0,1]$, and $x_*''\in L^2(\mu)$.
+It satisfies, almost everywhere on $[0,1]$,
+\begin{equation}\label{eq:nonlocal-euler}
+ -x_*''(t)+\lambda G_\delta[x_*](t)=0.
+\end{equation}
+Where both shifted neighbours are admitted, the force is
+\[
+ G_\delta[x_*](t)=2x_*(t)-x_*(t-\delta)-x_*(t+\delta)
+ \qquad(\delta\le t\le1-\delta).
+\]
+\end{theorem}
+\begin{proof}
+Take the minimizing coordinate from \Cref{thm:interval-minimum}.
+By \Cref{lem:shift-pairing}, its weak equation is
+\[
+ \langle f_*,h\rangle+\lambda\int
+ G_\delta[x_*](t)(Ph)(t)\,d\mu(t)=0\qquad(h\in H).
+\]
+The force belongs to $L^2(\mu)$. Apply
+\Cref{thm:variational-regularity} with $g=G_\delta[x_*]$.
+This gives the velocity regularity and
+$x_*''=\lambda G_\delta[x_*]$ almost everywhere, including
+square-integrability. The coordinate/path bijection identifies
+this path with the unique minimizer in $\mathcal A_{a,b}$.
+When $\delta\le t\le1-\delta$, both indicators in
+\eqref{eq:variational-force} are one; expanding gives the last formula.
+\leanproof{MonadFormal.Temporal.Variational.Interval.path_continuous,MonadFormal.Temporal.Variational.Interval.shift_inner_eq_force,MonadFormal.Temporal.Variational.Interval.exists_minimizer_euler,MonadFormal.Temporal.Variational.Interval.shiftForce_both}
+\end{proof}
+
+This is a strong equation almost everywhere, not a claim of two-sided
+endpoint derivatives or a pointwise second derivative at every cutoff.
+If $\delta>1/2$, the region with both neighbours is empty; the
+indicator formula still applies. The delayed and advanced terms arise
+from one boundary-constrained minimization problem. They do not supply
+an initial-value rule that reads an independently chosen future.

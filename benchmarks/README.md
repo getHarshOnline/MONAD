@@ -1,0 +1,1 @@
+Measurements of update-rule error and cost for a declared accuracy class. Nothing is implemented in this folder yet; the [library design](../docs/library-design.md) gives the plan and its prerequisites.

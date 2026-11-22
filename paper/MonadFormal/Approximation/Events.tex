@@ -1,0 +1,31 @@
+% Lean module: MonadFormal.Approximation.Events
+\subsection{Event meaning of the error}
+
+\begin{theorem}[Event characterization and separation]
+\label{thm:variation-events}
+For probability measures on any measurable space,
+\[
+ d_{\mathrm{TV}}(\mu,\nu)
+   =\sup_{B\text{ measurable}}|\mu(B)-\nu(B)|,
+ \qquad d_{\mathrm{TV}}(\mu,\nu)=0\iff\mu=\nu.
+\]
+\end{theorem}
+\begin{proof}
+Indicator functions are admitted tests, which proves that the event
+supremum is no larger than $d_{\mathrm{TV}}$.
+For the reverse inequality, fix $f\in\mathcal T(X)$. The layer-cake
+formula gives
+\[
+ \int f\,d\mu=\int_{(0,1]}\mu\{x:f(x)\ge t\}\,dt,
+ \qquad
+ \int f\,d\nu=\int_{(0,1]}\nu\{x:f(x)\ge t\}\,dt.
+\]
+The tail probabilities are measurable, bounded functions of $t$.
+Subtract these identities. The absolute value of each integrand
+difference is bounded by the event supremum; the integration interval
+has length one. Hence the test difference obeys the same bound.
+Taking the supremum over $f$ proves equality. Zero distance then forces
+agreement on every measurable event, which is equality of measures;
+the converse is diagonal vanishing.
+\leanproof{MonadFormal.Approximation.Test.indicator,MonadFormal.Approximation.eventTV,MonadFormal.Approximation.eventTV_le_tv,MonadFormal.Approximation.Test.tail,MonadFormal.Approximation.Test.integral_eq_integral_tail,MonadFormal.Approximation.tv_eq_eventTV,MonadFormal.Approximation.tv_eq_zero_iff}
+\end{proof}

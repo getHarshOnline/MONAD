@@ -1,0 +1,89 @@
+% Lean module: MonadFormal.Temporal.Variational.Interval
+\subsubsection{Endpoint-constrained interval paths}
+\label{sec:variational-interval}
+
+Let $\mu$ be Lebesgue measure restricted to $[0,1]$, and set
+$V=L^2(\mu;\mathbb R)$. For $f\in V$, define
+\[
+ (Pf)(t)=\int_0^t f(s)\,d\mu(s),\qquad
+ H=\{f\in V:(Pf)(1)=0\}.
+\]
+Functions in $V$ are identified almost everywhere. Their primitives
+are ordinary continuous functions; the integral does not depend on
+the representative. Given endpoint values $a,b\in\mathbb R$, put
+\[
+ x_f(t)=a+(b-a)t+(Pf)(t),\qquad f\in H.
+\]
+The restricted measure extends the primitive constantly outside the
+unit interval; this is an integration convention, not an additional
+equation of motion.
+\leandef{MonadFormal.Temporal.Variational.Interval.unitMeasure,MonadFormal.Temporal.Variational.Interval.Velocity,MonadFormal.Temporal.Variational.Interval.primitive,MonadFormal.Temporal.Variational.Interval.primitiveCLM,MonadFormal.Temporal.Variational.Interval.endpoint,MonadFormal.Temporal.Variational.Interval.variationSpace,MonadFormal.Temporal.Variational.Interval.path}
+
+\begin{lemma}[Bounded primitives and endpoint variations]
+\label[lemma]{lem:variational-paths}
+The map $P:V\to C_b(\mathbb R)$ is bounded linear, with
+$\lVert Pf\rVert_\infty\le\lVert f\rVert_2$.
+The subspace $H$ is closed. Each $x_f$ is absolutely continuous on
+$[0,1]$, has endpoints $x_f(0)=a$, $x_f(1)=b$, and satisfies
+$x_f'=b-a+f$ almost everywhere on that interval. Moreover,
+\[
+ \int f\,d\mu=0,\qquad
+ \int (b-a+f)^2\,d\mu=(b-a)^2+\lVert f\rVert_2^2
+ \quad(f\in H).
+\]
+\end{lemma}
+\begin{proof}
+Since $\mu(\mathbb R)=1$, Cauchy--Schwarz bounds each oriented
+primitive by $\lVert f\rVert_2$. Integration is linear, and an
+integrable function has a continuous primitive. Evaluation at $1$
+is bounded, so its composite with $P$ has closed kernel $H$.
+Extend $f$ by zero outside $[0,1]$. Ordinary integration of this
+extension equals $Pf$. The fundamental theorem for Lebesgue
+integrals gives absolute continuity and derivative $f$ almost
+everywhere. Add the affine path to obtain the endpoint and derivative
+claims. Finally, $(Pf)(1)=\int f\,d\mu=0$ removes the cross term
+in the expansion of $(b-a+f)^2$.
+\leanproof{MonadFormal.Temporal.Variational.Interval.velocity_integrable,MonadFormal.Temporal.Variational.Interval.primitive_continuous,MonadFormal.Temporal.Variational.Interval.primitive_bound,MonadFormal.Temporal.Variational.Interval.primitive_add,MonadFormal.Temporal.Variational.Interval.primitive_smul,MonadFormal.Temporal.Variational.Interval.primitiveCLM_apply,MonadFormal.Temporal.Variational.Interval.variation_initial,MonadFormal.Temporal.Variational.Interval.variation_terminal,MonadFormal.Temporal.Variational.Interval.extendedVelocity_integrable,MonadFormal.Temporal.Variational.Interval.primitive_eq_integral,MonadFormal.Temporal.Variational.Interval.primitive_absolutelyContinuous,MonadFormal.Temporal.Variational.Interval.primitive_hasDerivAt_ae,MonadFormal.Temporal.Variational.Interval.path_endpoints,MonadFormal.Temporal.Variational.Interval.path_hasDerivAt_ae,MonadFormal.Temporal.Variational.Interval.path_absolutelyContinuous,MonadFormal.Temporal.Variational.Interval.primitive_one_eq_integral,MonadFormal.Temporal.Variational.Interval.variation_integral_zero,MonadFormal.Temporal.Variational.Interval.integral_sq_eq_norm_sq,MonadFormal.Temporal.Variational.Interval.kinetic_integral}
+\end{proof}
+
+Fix $0\le\delta\le1$ and let $\nu_\delta$ be Lebesgue measure
+restricted to $[0,1-\delta]$. Define
+\[
+ T_\delta f(t)=Pf(t+\delta)-Pf(t),\qquad
+ b_\delta(t)=(b-a)\delta.
+\]
+Here $T_\delta:H\to L^2(\nu_\delta;\mathbb R)$ is bounded:
+it composes $P$, translation minus the identity, and inclusion of
+bounded continuous functions into $L^2$ of a finite measure.
+\leandef{MonadFormal.Temporal.Variational.Interval.shiftMeasure,MonadFormal.Temporal.Variational.Interval.differenceCLM,MonadFormal.Temporal.Variational.Interval.shiftCLM,MonadFormal.Temporal.Variational.Interval.affineOffset,MonadFormal.Temporal.Variational.Interval.intervalEnergy}
+
+\begin{theorem}[Nonlocal minimization in velocity coordinates]
+\label{thm:interval-minimum}
+For $\lambda\ge0$, the energy
+\[
+ J(x_f)=\frac12\int (b-a+f)^2\,d\mu
+  +\frac\lambda2\int\bigl(x_f(t+\delta)-x_f(t)\bigr)^2\,d\nu_\delta(t)
+\]
+has a unique minimizing velocity class $f_*\in H$. It satisfies
+\[
+ \langle f_*,h\rangle_{L^2(\mu)}
+ +\lambda\langle T_\delta f_*+b_\delta,T_\delta h\rangle_{L^2(\nu_\delta)}=0
+ \quad(h\in H).
+\]
+\end{theorem}
+\begin{proof}
+Almost everywhere,
+$T_\delta f+b_\delta=x_f(\,\cdot+\delta)-x_f$.
+The preceding lemma therefore gives
+\[
+ J(x_f)=\frac{(b-a)^2}{2}
+       +\frac{\lVert f\rVert_2^2}{2}
+       +\frac\lambda2\lVert T_\delta f+b_\delta\rVert_2^2.
+\]
+Apply \Cref{thm:variational-minimum} to the Hilbert space $H$,
+operator $T_\delta$ and offset $b_\delta$. The constant term does
+not affect minimization.
+\leanproof{MonadFormal.Temporal.Variational.Interval.shiftCLM_apply_ae,MonadFormal.Temporal.Variational.Interval.shifted_path_ae,MonadFormal.Temporal.Variational.Interval.intervalEnergy_eq_integrals,MonadFormal.Temporal.Variational.Interval.exists_unique_interval_minimizer,MonadFormal.Temporal.Variational.Interval.exists_interval_stationary_minimizer}
+\end{proof}
+
+\input{MonadFormal/Temporal/Variational/Paths}

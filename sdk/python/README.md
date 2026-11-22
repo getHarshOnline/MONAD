@@ -1,0 +1,1 @@
+Python access through a Rust extension, with NumPy projections and type stubs. Nothing is implemented in this folder yet; the [library design](../../docs/library-design.md) gives the plan and its prerequisites.

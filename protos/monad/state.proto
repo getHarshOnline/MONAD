@@ -1,0 +1,4 @@
+syntax = "proto3";
+package monad;
+
+// The state-space schema in MONAD's shared contracts. It declares no messages yet.

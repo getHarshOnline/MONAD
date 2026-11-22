@@ -1,0 +1,1 @@
+Language interfaces over the shared Rust facade. No language SDK exists, and research code uses `kernel/` directly. Nothing is implemented in this folder yet; the [library design](../docs/library-design.md) gives the plan and its prerequisites.

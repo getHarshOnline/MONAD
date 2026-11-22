@@ -1,0 +1,80 @@
+% Lean module: MonadFormal.Repair.Supplement
+\subsection{Exact supplements and the timing of relevance}
+\label{sec:supplement-coding}
+
+The next access model is different from measurement repair. An encoder
+still sees $x\in X$, while the decoder receives only retained side
+information $q(x)\in Q$ and a supplementary message $e(x)\in A$.
+The required answer is $r(x)\in V$. An exact supplement consists of
+maps $e:X\to A$ and $d:Q\times A\to V$ satisfying
+\[
+ d(q(x),e(x))=r(x)\qquad(x\in X).
+\]
+Assume $X$ and $Q$ are finite and $V$ is nonempty. For each retained
+value $y$, let
+\[
+ R_y=r(q^{-1}(\{y\})),\qquad
+ M=\max_{y\in Q}|R_y|,
+ \qquad \max\varnothing=0.
+\]
+\leandef{MonadFormal.Repair.HasSupplement,MonadFormal.Repair.fiberTargets,MonadFormal.Repair.supplementSize}
+
+\begin{theorem}[Minimum exact supplement alphabet]\label{thm:supplement-alphabet}
+An exact supplement with alphabet $\{0,\ldots,k-1\}$ exists if and
+only if $M\le k$. In particular, the minimum alphabet size is $M$.
+For fixed-length binary messages, the minimum length is
+\[
+ b_{\min}=\min\{b\in\mathbb N:M\le 2^b\}.
+\]
+This is the integer ceiling logarithm, with value zero also when $M=0$.
+\end{theorem}
+\begin{proof}
+Fix a retained value $y$. Every target value in $R_y$ must be obtainable
+by applying $d(y,\cdot)$ to a message. Therefore $|R_y|\le |A|$,
+which gives the lower bound for every fiber and hence for their maximum.
+
+Conversely, if $|R_y|\le k$, enumerate the distinct target values in
+each fiber using distinct indices in $\{0,\ldots,k-1\}$. The encoder
+knows $q(x)$ and $r(x)$, so it sends the index of $r(x)$ in that fiber's
+enumeration. The decoder uses $y$ to select the enumeration and recover
+the target. Give unused indices arbitrary answers in the nonempty set
+$V$. Distinct fibers may reuse the same message indices because the
+decoder already knows $y$. This constructs an exact supplement of
+size $M$ as well as one of any larger size.
+
+There are $2^b$ binary words of length $b$. Relabeling an alphabet
+preserves the coding equation, so a length-$b$ code exists exactly
+when $M\le2^b$. The least such natural number is the integer ceiling
+logarithm; the corresponding code exists, not merely a limiting code.
+\leanproof{MonadFormal.Repair.supplement_lower_bound,MonadFormal.Repair.supplement_upper_bound,MonadFormal.Repair.supplement_iff,MonadFormal.Repair.supplementSize_le_iff,MonadFormal.Repair.supplement_minimum,MonadFormal.Repair.supplement_relabel,MonadFormal.Repair.supplement_bits_iff,MonadFormal.Repair.supplement_binary_iff,MonadFormal.Repair.supplement_minimum_bits}
+\end{proof}
+This is an exact, one-shot, worst-case alphabet result, not an entropy
+or asymptotic average-rate assertion. It assumes an encoder with access
+to the original state. It supplies no method for reconstructing the
+supplement from an already insufficient $q(x)$ alone, and it does not
+charge computation or measurement costs to the encoder.
+
+\begin{theorem}[A question known before versus after compression]
+\label{thm:query-timing}
+Let $X=\{0,1\}^n$. If a coordinate $i$ is known to the encoder before
+compression, one bit suffices to answer that coordinate. In contrast,
+suppose one common encoding $e:X\to A$ must support exact answers to
+every coordinate selected after compression, with no other retained
+information or later measurement. Then $e$ is injective and
+$|A|\ge2^n$. A binary fixed-length encoding therefore requires at
+least $n$ bits, and storing all $n$ bits attains the bound.
+\end{theorem}
+\begin{proof}
+For a known coordinate, send $x_i$ and return the received bit. For a
+question chosen later, suppose $e(x)=e(y)$. The same decoder, applied
+to either message and any coordinate $i$, must return both $x_i$ and
+$y_i$. Thus all coordinates agree and $x=y$. The encoding is injective,
+so its alphabet has at least $2^n$ elements. A $b$-bit alphabet has
+$2^b$ elements, hence $b\ge n$. The identity encoding stores the vector
+and answers every coordinate, establishing attainability.
+\leanproof{MonadFormal.Repair.known_query_one_bit,MonadFormal.Repair.all_queries_force_injective,MonadFormal.Repair.all_queries_alphabet_bound,MonadFormal.Repair.all_queries_need_n_bits,MonadFormal.Repair.storing_n_bits_answers_all}
+\end{proof}
+The distinction is a change in the admitted question family and its
+timing, not the creation of a previously nonexistent coordinate. It
+provides a precise baseline for anticipatory compression without a
+novelty claim or an assumption of access to discarded state.

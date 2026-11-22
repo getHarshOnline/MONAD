@@ -1,0 +1,89 @@
+% Lean module: MonadFormal.Repair
+\section{Obtainable repair by measurement}\label{sec:obtainable-repair}
+
+The non-recovery result closes one route: the retained quotient alone
+cannot reconstruct a distinction it has identified away. The
+remaining question is whether some still-accessible source can supply
+the missing distinction, and at what cost.
+
+Suppose the actual information state restricts the latent state to
+$S\subseteq X$. An allowed measurement $m_j:X\to O$ costs
+$w_j\in\mathbb N$. Measurements are exact, nondestructive reads of
+a source the system can still access. A required answer is $r:X\to V$.
+An adaptive tree either returns a value or chooses $j$ and branches on
+$m_j(x)$. Correctness means that every $x\in S$ receives answer $r(x)$.
+Its budget is a worst-case bound along every branch, not an expected cost.
+\leandef{MonadFormal.Repair.Tree,MonadFormal.Repair.evaluate,MonadFormal.Repair.Within,MonadFormal.Repair.Correct,MonadFormal.Repair.Feasible}
+
+Write $\mathsf F(S,b)$ when such a correct tree exists within budget $b$,
+and $S_{j,o}=S\cap m_j^{-1}(\{o\})$.
+\begin{theorem}[Adaptive repair feasibility]\label{thm:repair-feasibility}
+The exact recurrence is
+\begin{align*}
+ \mathsf F(S,b)\iff{}&
+   (\exists v\in V:\ \forall x\in S,\ r(x)=v)\\
+ &\quad\text{or}\quad
+   (\exists j:\ w_j\le b\ \text{and}\
+       \forall o\in O,\ \mathsf F(S_{j,o},b-w_j)).
+\end{align*}
+\end{theorem}
+\begin{proof}
+A correct tree either returns a constant answer, giving the first
+case, or begins with a query $j$. In the latter case the budget pays
+$w_j$, and each child must be correct on the compatible fiber
+$S_{j,o}$ with the residual budget. Conversely, a constant answer
+constructs a leaf. In the second case, choose a witnessing tree for
+each outcome and attach it beneath a query node. Its correctness and
+budget follow from the corresponding properties of its children.
+\leanproof{MonadFormal.Repair.correct_query_iff,MonadFormal.Repair.feasible_iff}
+\end{proof}
+This is an existence recurrence. Section~\ref{sec:optimal-repair} proves
+minimum-cost attainment and a cardinality-founded recursion after pruning
+nonsplitting queries. The present tree budget includes unreachable branches;
+with a nonempty answer type those branches can receive zero-cost leaves.
+
+\begin{theorem}[Adaptive non-recovery]\label{thm:adaptive-no-recovery}
+If $x,y\in S$ agree on every available measurement but
+$r(x)\ne r(y)$, no adaptive measurement tree is correct on $S$.
+\end{theorem}
+\begin{proof}
+Induct on the tree. A leaf gives both states the same answer. At a
+query node the two measurement values agree, so both states enter the
+same child; the induction hypothesis gives equal answers there.
+Correctness would therefore imply $r(x)=r(y)$, a contradiction.
+\leanproof{MonadFormal.Repair.indistinguishable_evaluation,MonadFormal.Repair.no_repair_from_identical_measurements}
+\end{proof}
+
+\begin{theorem}[Zero-cost repair and free information]\label{thm:zero-cost-repair}
+If every query costs strictly more than zero, $\mathsf F(S,0)$ holds
+exactly when a constant answer is correct on $S$. Without positivity,
+a zero-budget tree still cannot distinguish states that agree on every
+zero-cost measurement.
+\end{theorem}
+\begin{proof}
+A positive-cost query cannot be paid for at budget zero, so a feasible
+tree must be a leaf; conversely, a correct leaf costs zero. For the
+second statement, induct on a zero-budget tree. Every queried index
+has cost zero. Equal free-measurement values select the same child,
+which is still a zero-budget tree.
+\leanproof{MonadFormal.Repair.zero_budget_iff_constant,MonadFormal.Repair.zero_budget_respects_free_fibers}
+\end{proof}
+
+\begin{example}[A free query defeats a storage-only criterion]
+\label{ex:free-query}
+Store only a constant from $X=\{0,1\}$ but retain a zero-cost
+measurement of the original bit. One query recovers the bit with zero
+cost, although the identity probe does not factor through the stored
+constant.
+\end{example}
+\begin{proof}
+Query the bit and return the observed value. Both leaves cost zero,
+and the answer equals the state. A decoder of the constant storage
+would assign the same answer to zero and one, which is impossible.
+\leanproof{MonadFormal.Repair.free_bit_costs_zero,MonadFormal.Repair.free_bit_recovers,MonadFormal.Repair.free_bit_not_in_constant_storage}
+\end{proof}
+Consequently ``zero repair cost'' is relative to the full free-access
+structure, not automatically to the stored quotient alone.
+
+\input{MonadFormal/Repair/Optimal}
+\input{MonadFormal/Repair/Supplement}

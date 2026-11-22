@@ -1,0 +1,42 @@
+% Lean module: MonadFormal.Sandbox
+\subsubsection{Present and continuation-sensitive distinctions}
+\label{ss:continuations}
+
+For a context $C$, present indistinguishability is
+\begin{equation}
+  x \presentEq{C} y
+  \iff p(x)=p(y)\quad\text{for every }p\in\Probes{C}.
+  \label{eq:present-eq}
+\end{equation}
+This is equality of admitted observations, not equality of entities.
+Let $\Conts{C}$ be an admitted family of continuations $k:C\to D$.
+Their continuation-probe family is
+\begin{equation}
+  \ContProbes{C}=\{p\circ k_*:k\in\Conts{C},\;
+    p\in\Probes{\operatorname{cod}(k)}\}.
+  \label{eq:cont-probe-family}
+\end{equation}
+Define
+\begin{equation}
+  x\contEq{C}y\iff f(x)=f(y)
+    \quad\text{for every }f\in\ContProbes{C}.
+  \label{eq:cont-eq}
+\end{equation}
+The future enters through admitted tests of possible continuations;
+no information from an actual future is assumed available.
+
+Both relations use the same mathematical object: an indexed family
+$F=(f_i:X\to O_i)_{i\in I}$, with possibly different codomains.
+Write $x\approx_F y$ when $f_i(x)=f_i(y)$ for every $i$.
+\leandef{MonadFormal.ProbeFamily,MonadFormal.indist}
+
+\begin{theorem}[Observational equivalence]\label{thm:observational-equivalence}
+For every probe family $F$, the relation $\approx_F$ is an equivalence
+relation on $X$.
+\end{theorem}
+\begin{proof}
+For each $i$, equality in $O_i$ is reflexive, symmetric and transitive.
+Applying the corresponding equality law separately at every index proves
+the three laws for $\approx_F$.
+\leanproof{MonadFormal.indist_refl,MonadFormal.indist_symm,MonadFormal.indist_trans}
+\end{proof}

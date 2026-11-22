@@ -1,0 +1,98 @@
+% Lean module: MonadFormal.Temporal
+\section{Temporal dependence and whole-path constraints}
+\label{sec:temporal-elimination}
+
+A future-facing formula need not describe a new causal law. The same
+ordinary differential system can yield either a past-memory expression
+or a terminal-value expression, according to the boundary information
+used to eliminate an unobserved component. This gives a concrete null
+explanation for one part of the whole-path intuition. Projection and
+memory also appear in the broader Mori--Zwanzig programme
+\cite{chorin2000optimal}; the result below is the bounded, linear case,
+not the general nonlinear theory.
+
+Three cases must be kept separate: elimination of an ordinary hidden
+state, a literal mixed advance--delay equation, and a variational law
+on complete paths. Each has its own data and existence question.
+
+\subsection{Eliminating a hidden linear state}
+
+Let $U,V$ be real Banach spaces and let
+\[
+ A:U\to U,\quad B:V\to U,\quad C:U\to V,\quad D:V\to V
+\]
+be bounded linear operators. Define the operator-exponential propagator
+$E_D(t)=\exp(tD)$. The paths below are defined on $\mathbb R$ and are
+differentiable at every point of the stated closed interval. This
+endpoint assumption excludes merely one-sided endpoint derivatives.
+All integrals are Bochner
+integrals, with their usual orientation.
+\leandef{MonadFormal.Temporal.flow}
+
+\begin{theorem}[Variation of constants and terminal anchoring]
+\label{thm:temporal-variation}
+If $f$ is continuous on the interval between $a$ and $t$ and
+$v'(s)=f(s)+Dv(s)$ throughout that interval, then
+\begin{equation}\label{eq:temporal-variation}
+ v(t)=E_D(t-a)v(a)+\int_a^t E_D(t-s)f(s)\,ds.
+\end{equation}
+In particular, on $[t,T]$ the same hypotheses give
+\begin{equation}\label{eq:temporal-terminal}
+ v(t)=E_D(t-T)v(T)-\int_t^T E_D(t-s)f(s)\,ds.
+\end{equation}
+\end{theorem}
+\begin{proof}
+The exponential is continuous, $E_D(0)=I$, and
+$E_D'(r)=E_D(r)D$. The product and chain rules therefore give
+\[
+ \frac{d}{ds}\bigl(E_D(t-s)v(s)\bigr)
+ =-E_D(t-s)Dv(s)+E_D(t-s)\bigl(f(s)+Dv(s)\bigr)
+ =E_D(t-s)f(s).
+\]
+The last integrand is continuous and hence integrable. Integrating
+between $a$ and $t$ gives \eqref{eq:temporal-variation}. Anchor that
+identity at $T$ and reverse the oriented integral to obtain
+\eqref{eq:temporal-terminal}.
+\leanproof{MonadFormal.Temporal.flow_zero,MonadFormal.Temporal.continuous_flow,MonadFormal.Temporal.flow_derivative,MonadFormal.Temporal.backward_flow_derivative,MonadFormal.Temporal.weighted_forcing_integrable,MonadFormal.Temporal.integrating_factor_derivative,MonadFormal.Temporal.variation_of_constants,MonadFormal.Temporal.terminal_variation_of_constants}
+\end{proof}
+
+\begin{theorem}[Exact memory and future-integral reductions]
+\label{thm:temporal-reductions}
+Suppose $u$ is continuous and $v'=Cu+Dv$ on $[a,t]$, and
+$u'(t)=Au(t)+Bv(t)$. Then
+\begin{equation}\label{eq:temporal-memory}
+ u'(t)=Au(t)+BE_D(t-a)v(a)
+       +\int_a^t BE_D(t-s)Cu(s)\,ds.
+\end{equation}
+With the corresponding hypotheses on $[t,T]$, instead,
+\begin{equation}\label{eq:temporal-future}
+ u'(t)=Au(t)+BE_D(t-T)v(T)
+       -\int_t^T BE_D(t-s)Cu(s)\,ds.
+\end{equation}
+If both component derivatives hold at $t$, the paired state satisfies
+\[
+ \frac{d}{dt}(u(t),v(t))
+ =\bigl(Au(t)+Bv(t),\;Cu(t)+Dv(t)\bigr).
+\]
+\end{theorem}
+\begin{proof}
+Apply \Cref{thm:temporal-variation} with $f=Cu$, substitute into
+$Au(t)+Bv(t)$, and commute the bounded linear map $B$ with the
+integral. For the terminal form, use \eqref{eq:temporal-terminal}.
+The derivative of the paired state is the pair of component derivatives.
+\leanproof{MonadFormal.Temporal.memory_equation,MonadFormal.Temporal.terminal_equation,MonadFormal.Temporal.augmented_derivative}
+\end{proof}
+
+These are identities obeyed by a coupled-system solution. They do not
+assert existence for arbitrary mixed boundary data, nor do they make
+$v(a)$ or $v(T)$ accessible to an observer who did not retain or obtain
+it. Enlarging the mathematical state to $(u,v)$ does not establish an
+affordable encoding in the operational access state $A_t$.
+Equation~\eqref{eq:temporal-future} is a terminally constrained
+description of ordinary dynamics, not an initial-value update rule that
+reads an independently chosen future. Literal advance--delay dynamics
+and whole-path variational constraints require separate well-posedness
+and boundary analyses.
+
+\input{MonadFormal/Temporal/MixedBoundary}
+\input{MonadFormal/Temporal/Variational}

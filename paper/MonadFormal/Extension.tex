@@ -1,0 +1,43 @@
+% Lean module: MonadFormal.Extension
+\subsubsection{Covered extensions and irreversible loss}
+
+\begin{theorem}[Fiber-constancy criterion]\label{thm:fiber-constancy}
+For a surjection $q:X\to Y$, a probe $f:X\to O$ factors through
+$q$ if and only if $q(x)=q(y)$ implies $f(x)=f(y)$.
+\end{theorem}
+\begin{proof}
+If $f=\bar f\circ q$, apply $\bar f$ to $q(x)=q(y)$.
+Conversely, choose a representative $x_y$ in each fiber and define
+$\bar f(y)=f(x_y)$. Constancy on fibers gives
+$\bar f(q(x))=f(x)$. Surjectivity avoids an unspoken assumption
+that values can be assigned on unused codomain elements.
+\leanproof{MonadFormal.factors_iff_fiber_const}
+\end{proof}
+
+\begin{theorem}[Closure of covered extensions]\label{thm:covered-extension}
+Suppose every probe $f'_i\circ e$ pulled back along $e:X\to X'$
+factors through the old quotient $q_F$. Then
+$x\approx_F y$ implies $e(x)\approx_{F'}e(y)$.
+\end{theorem}
+\begin{proof}
+For each $i$, write $f'_i\circ e=g_i\circ q_F$.
+Observational equivalence gives $q_F(x)=q_F(y)$; applying $g_i$
+gives $f'_i(e(x))=f'_i(e(y))$.
+\leanproof{MonadFormal.indist_pullback_of_factors}
+\end{proof}
+Selecting another member of an already covered family cannot split
+an old class. Family enlargement and selection within a fixed family
+are different context changes.
+
+\begin{theorem}[Non-recovery from an identified pair]\label{thm:no-recovery}
+If $q(x)=q(y)$ but $q'(e(x))\ne q'(e(y))$, there is no
+$r:Y\to Y'$ with $r\circ q=q'\circ e$.
+\end{theorem}
+\begin{proof}
+Such an $r$ would give
+$q'(e(x))=r(q(x))=r(q(y))=q'(e(y))$, contradicting the hypothesis.
+\leanproof{MonadFormal.no_recovery}
+\end{proof}
+This is a statement about recovery from $q$ alone. It does not exclude
+an archive, a fresh measurement, or side information that distinguishes
+the two states.

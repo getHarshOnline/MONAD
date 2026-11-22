@@ -1,0 +1,77 @@
+% Lean module: MonadFormal.Information.Testing.Tilted
+\subsubsection{Common-support tilting}
+\label{sec:chernoff-tilting}
+
+Zero masses require care at the endpoints of the exponent interval.
+Let $S=\{x:p_x>0,\ q_x>0\}$ and, for real $s$, define
+\[
+ w_s(x)=
+ \begin{cases}
+  \exp\bigl(s\log p_x+(1-s)\log q_x\bigr),&x\in S,\\
+  0,&x\notin S,
+ \end{cases}
+ \qquad \overline Z_s=\sum_x w_s(x).
+\]
+On $S$, put $\ell(x)=\log p_x-\log q_x$, with any fixed finite
+extension off $S$; those values do not affect any expectation below.
+If $S\ne\varnothing$, the
+tilted law is $R_s(\{x\})=w_s(x)/\overline Z_s$.
+\leandef{MonadFormal.Information.commonSupport,MonadFormal.Information.logLikelihood,MonadFormal.Information.supportWeight,MonadFormal.Information.supportPartition,MonadFormal.Information.tiltedLaw}
+
+\begin{lemma}[Continuous support extension]
+\label{lem:chernoff-support-extension}
+The function $s\mapsto\overline Z_s$ is continuous on
+$\mathbb R$, agrees with $Z_s$ for $0<s<1$, and satisfies
+\[
+ \overline Z_0=Q(S),\qquad \overline Z_1=P(S).
+\]
+It attains a minimum at some $s_*\in[0,1]$, with
+\[
+ \overline Z_{s_*}=\inf_{0<s<1}Z_s.
+\]
+If $S\ne\varnothing$, then $\overline Z_s>0$ for every real $s$.
+\end{lemma}
+\begin{proof}
+Every nonzero weight is a positive exponential, and
+$w_s'(x)=w_s(x)\ell(x)$. Finite summation gives continuity
+and positivity when a common atom exists. On the open interval,
+an atom outside $S$ contributes zero to both definitions; on $S$,
+the exponential is $p_x^sq_x^{1-s}$. Substitution at $0$ and $1$
+gives the stated support masses, which need not equal one.
+Compactness gives a minimizer on $[0,1]$. Its value bounds all
+interior values from below; continuity and density of $(0,1)$ in
+$[0,1]$ give the reverse infimum inequality.
+\leanproof{MonadFormal.Information.supportWeight_nonneg,MonadFormal.Information.supportWeight_pos,MonadFormal.Information.hasDerivAt_supportWeight,MonadFormal.Information.supportPartition_pos,MonadFormal.Information.hasDerivAt_supportPartition,MonadFormal.Information.continuous_supportPartition,MonadFormal.Information.ofReal_supportWeight,MonadFormal.Information.ofReal_supportPartition,MonadFormal.Information.supportPartition_zero,MonadFormal.Information.supportPartition_one,MonadFormal.Information.exists_min_supportPartition,MonadFormal.Information.iInf_chernoffCoeff_eq_of_isMinOn}
+\end{proof}
+
+\begin{lemma}[Directional conditions and likelihood transport]
+\label{lem:chernoff-tilt-conditions}
+Suppose $S\ne\varnothing$ and $s_*$ minimizes $\overline Z_s$
+on $[0,1]$. Write $z=\overline Z_{s_*}$, $R=R_{s_*}$ and
+$m=\mathbb E_R\ell$. Then
+\[
+ s_*m\le0,\qquad (1-s_*)m\ge0.
+\]
+Moreover, for every $x$,
+\[
+ R(\{x\})z e^{(1-s_*)\ell(x)}\le p_x,
+ \qquad
+ R(\{x\})z e^{-s_*\ell(x)}\le q_x,
+\]
+with equality on $S$.
+\end{lemma}
+\begin{proof}
+Normalization gives $\sum_xR_s(\{x\})=1$ and
+\[
+ \frac{d}{ds}\log\overline Z_s
+ =\frac{\sum_xw_s(x)\ell(x)}{\overline Z_s}
+ =\mathbb E_{R_s}\ell.
+\]
+At a constrained minimum, $(t-s_*)m\ge0$ for every $t\in[0,1]$.
+Taking $t=0,1$ proves the two conditions. Thus an interior
+minimizer has $m=0$, but an endpoint minimizer need not.
+On $S$, multiply the weight by the indicated exponential and
+cancel its normalization: the exponents combine to $\log p_x$
+or $\log q_x$. Outside $S$, the left sides are zero.
+\leanproof{MonadFormal.Information.tiltedLaw_singleton,MonadFormal.Information.tiltedLaw_real_singleton,MonadFormal.Information.integral_tiltedLaw,MonadFormal.Information.hasDerivAt_log_supportPartition,MonadFormal.Information.supportPartition_firstOrder,MonadFormal.Information.tilted_mean_firstOrder,MonadFormal.Information.tilted_mean_endpoint_conditions,MonadFormal.Information.supportWeight_mul_exp_left,MonadFormal.Information.supportWeight_mul_exp_right,MonadFormal.Information.tiltedLaw_likelihood_left_le,MonadFormal.Information.tiltedLaw_likelihood_right_le}
+\end{proof}

@@ -1,0 +1,1 @@
+Profile mappings between paper sections, Lean declarations and kernel symbols. Nothing is implemented in this folder yet; the [library design](../../docs/library-design.md) gives the plan and its prerequisites.

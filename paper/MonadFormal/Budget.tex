@@ -1,0 +1,68 @@
+% Lean module: MonadFormal.Budget
+\section{Budgeted continuation equivalence}\label{sec:budget-calculus}
+
+The first relaxation restricts continuations by cost. At budget $b$,
+only affordable continuations contribute probes, so the budget
+determines which distinctions the representation is required to
+preserve.
+
+Let $\mathcal A$ be an action set, $T_a:X\to X$ total deterministic
+maps, $c(a)\in\mathbb N$ their costs, and $p_i:X\to O$ probes.
+For a word $w=a_1\cdots a_k$, let
+$T_w=T_{a_k}\circ\cdots\circ T_{a_1}$ and
+$c(w)=\sum_jc(a_j)$. The empty word has identity action and zero cost.
+At budget $b$, define
+\begin{equation}
+ x\approx_b y\iff
+ \forall i,w\text{ with }c(w)\le b,\quad p_i(T_wx)=p_i(T_wy).
+ \label{eq:budget-equivalence}
+\end{equation}
+This is the ordinary observational relation for the family indexed by
+admitted word-probe pairs.
+\leandef{MonadFormal.Budget.cost,MonadFormal.Budget.run,MonadFormal.Budget.Indist,MonadFormal.Budget.family,MonadFormal.Budget.indist_iff_family}
+
+\begin{theorem}[Residual-budget law]\label{thm:residual-budget}
+If $c(a)\le b$ and $x\approx_b y$, then
+$T_ax\approx_{b-c(a)}T_ay$. Also, $b_1\le b_2$ implies
+that $\approx_{b_2}$ refines $\approx_{b_1}$.
+\end{theorem}
+\begin{proof}
+Any word $w$ admitted at residual budget satisfies
+$c(aw)=c(a)+c(w)\le b$. Apply $x\approx_b y$ to the word $aw$.
+The second statement follows by inclusion of admitted words.
+\leanproof{MonadFormal.Budget.residual,MonadFormal.Budget.budget_mono}
+\end{proof}
+
+\begin{theorem}[One-step characterization]\label{thm:budget-recursion}
+For every $b\in\mathbb N$,
+\[
+ x\approx_b y\iff
+ \bigl(\forall i,\ p_i(x)=p_i(y)\bigr)\ \text{and}\
+ \bigl(\forall a:\ c(a)\le b,\ T_ax\approx_{b-c(a)}T_ay\bigr).
+\]
+\end{theorem}
+\begin{proof}
+The empty word gives equality of present probes, and the residual-budget
+law gives the second condition. Conversely, an admitted word is either
+empty or $aw$. In the latter case its tail satisfies
+$c(w)\le b-c(a)$, so the second condition supplies its probe equality.
+\leanproof{MonadFormal.Budget.present,MonadFormal.Budget.one_step_iff}
+\end{proof}
+
+\begin{lemma}[Strict descent for positive costs]\label{lem:budget-descent}
+If $c(a)>0$ and $c(a)\le b$, then $b-c(a)<b$.
+For arbitrary words $u,v$, $c(uv)=c(u)+c(v)$ and
+$T_{uv}=T_v\circ T_u$.
+\end{lemma}
+\begin{proof}
+The strict inequality is natural-number subtraction with a positive
+subtrahend no larger than $b$. The two concatenation identities follow
+by induction on $u$, using the definitions of cost and execution.
+\leanproof{MonadFormal.Budget.positive_cost_residual_lt,MonadFormal.Budget.cost_append,MonadFormal.Budget.run_append}
+\end{proof}
+
+Positive costs permit an ascending-budget implementation of the
+one-step characterization. Zero-cost actions do not invalidate the
+logical theorem, but remove that strict descent. Partial actions need
+an explicit convention for enabledness and failed execution; they are
+not silently included in this total-map result.

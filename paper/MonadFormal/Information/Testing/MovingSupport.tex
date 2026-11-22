@@ -1,0 +1,62 @@
+% Lean module: MonadFormal.Information.Testing.MovingSupport
+\subsubsection{A moving-support counterexample}
+\label{sec:moving-support}
+
+Let $U_\theta$ be the Lebesgue-uniform probability law on $(0,\theta]$,
+where $\theta>0$. Thus
+$U_\theta=\theta^{-1}\lambda|_{(0,\theta]}$, with $\lambda$
+Lebesgue measure. The endpoint is an unknown parameter, so changing it
+changes the support, not just the density on a fixed set.
+\leandef{MonadFormal.Information.intervalLaw}
+
+\begin{proposition}[Exact endpoint-testing error]
+\label{prop:uniform-testing-error}
+For $0<\theta\le u$, arbitrary binary priors $a,b$, and $n\ge0$,
+\[
+ e_\pi(U_\theta^{\otimes n},U_u^{\otimes n})
+ =\min\left\{a,b\left(\frac\theta u\right)^n\right\}.
+\]
+For balanced priors this is
+$\tfrac12(\theta/u)^n$.
+\end{proposition}
+\begin{proof}
+Take $A=(0,\theta]$. Direct restriction of Lebesgue measure gives
+$U_\theta(A)=1$, $U_u(A)=\theta/u$ and
+$U_u|_A=(\theta/u)U_\theta$.
+Apply \Cref{cor:conditioning-iid}. Since $0<\theta/u\le1$,
+the second term in the minimum is no larger than the first when
+$a=b=1/2$.
+\leanproof{MonadFormal.Information.intervalLaw_mass,MonadFormal.Information.intervalLaw_restrict,MonadFormal.Information.intervalLaw_binaryError,MonadFormal.Information.intervalLaw_binaryError_toReal,MonadFormal.Information.intervalLaw_binaryError_equalPrior}
+\end{proof}
+
+\begin{theorem}[Inverse-sample local scale]
+\label{thm:uniform-local-scale}
+Fix $\theta>0$ and $h\ge0$, and for $n\ge1$ put
+$u_n=\theta+h/n$. Then
+\[
+ \lim_{n\to\infty}e_\pi(U_\theta^{\otimes n},U_{u_n}^{\otimes n})
+ =\min\{a,b e^{-h/\theta}\}.
+\]
+With balanced priors and $h>0$, this limit is
+$\tfrac12 e^{-h/\theta}\in(0,1/2)$.
+\end{theorem}
+\begin{proof}
+The preceding proposition reduces the limit to
+\[
+ \left(\frac{\theta}{\theta+h/n}\right)^n
+ =\left(1+\frac{h/\theta}{n}\right)^{-n}
+ \longrightarrow e^{-h/\theta}.
+\]
+The usual exponential limit is positive, so taking reciprocals
+preserves convergence. Multiplication by $b$ and taking the minimum
+with $a$ are continuous. For $h>0$, $0<e^{-h/\theta}<1$,
+which gives the balanced-prior assertion.
+\leanproof{MonadFormal.Information.tendsto_interval_support_power,MonadFormal.Information.tendsto_interval_binaryError,MonadFormal.Information.tendsto_interval_binaryError_equalPrior,MonadFormal.Information.interval_local_error_nontrivial}
+\end{proof}
+
+The alternative changes with $n$: this is a local testing limit,
+not the fixed-alternative Chernoff exponent of
+\Cref{thm:chernoff-exponent}. A displacement of order $n^{-1}$
+already gives a nontrivial testing problem here. A universal
+$n^{-1/2}$ parameter scale would therefore erase the dependence on
+the family's regularity and support behavior.

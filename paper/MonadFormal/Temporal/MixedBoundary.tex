@@ -1,0 +1,114 @@
+% Lean module: MonadFormal.Temporal.MixedBoundary
+\subsection{A literal mixed equation and a resonance obstruction}
+\label{sec:mixed-boundary}
+
+The eliminated-state identities do not settle well-posedness of an
+arbitrary equation containing advanced arguments. Consider the scalar
+boundary problem
+\begin{equation}\label{eq:mixed-boundary}
+ x'(t)=\alpha\bigl(x(t-\tfrac12)+x(t+\tfrac12)\bigr),\qquad
+ x(t)=0\ (t\le0),\quad x(t)=1\ (t>1).
+\end{equation}
+Here a solution means a real-valued path continuous on $[0,1]$, with
+the displayed derivative on the two open intervals $(0,\tfrac12)$ and
+$(\tfrac12,1)$. We do not require differentiability at $\tfrac12$ or
+continuity across the future boundary at $1$. These qualifications are
+part of the problem, not conclusions of the calculation.
+\leandef{MonadFormal.Temporal.MixedBoundary.IsSolution}
+
+Put $u(s)=x(s)$ and $v(s)=x(s+\tfrac12)$ for $0\le s\le\tfrac12$.
+The two open-interval equations become
+\[
+ u'=\alpha v,\qquad v'=\alpha(u+1),\qquad
+ u(0)=0,\quad u(\tfrac12)=v(0).
+\]
+The last equality is the seam condition: both sides describe
+$x(\tfrac12)$. Define
+\begin{align*}
+ u_\beta(s)&=\cosh(\alpha s)-1+\beta\sinh(\alpha s),\\
+ v_\beta(s)&=\sinh(\alpha s)+\beta\cosh(\alpha s).
+\end{align*}
+\leandef{MonadFormal.Temporal.MixedBoundary.left,MonadFormal.Temporal.MixedBoundary.right}
+
+\begin{lemma}[Exhaustive split-system solution]
+\label[lemma]{lem:mixed-split}
+Suppose $u,v$ are continuous on $[0,t]$, differentiable on $(0,t)$,
+satisfy $u'=\alpha v$, $v'=\alpha(u+1)$ there, and $u(0)=0$.
+For $t\ge0$, their endpoint values are
+$u(t)=u_\beta(t)$ and $v(t)=v_\beta(t)$, where $\beta=v(0)$.
+Conversely, $u_\beta,v_\beta$ satisfy the two differential equations
+everywhere and have initial values $0,\beta$.
+\end{lemma}
+\begin{proof}
+For $z'=cz$, the derivative of $z(s)e^{-cs}$ is zero on the
+interior. Continuity at the endpoints and the fundamental theorem of
+calculus give $z(t)=z(0)e^{ct}$. Apply this first to $u+1+v$, with
+$c=\alpha$, and then to $u+1-v$, with $c=-\alpha$. Adding and
+subtracting the resulting identities gives the displayed hyperbolic
+formulas. Their derivatives and initial values follow directly from
+the derivatives of $\sinh$ and $\cosh$.
+\leanproof{MonadFormal.Temporal.MixedBoundary.scalar_solution,MonadFormal.Temporal.MixedBoundary.split_solution,MonadFormal.Temporal.MixedBoundary.left_zero,MonadFormal.Temporal.MixedBoundary.right_zero,MonadFormal.Temporal.MixedBoundary.left_derivative,MonadFormal.Temporal.MixedBoundary.right_derivative}
+\end{proof}
+
+\begin{theorem}[Boundary compatibility and exact existence criterion]
+\label{thm:mixed-existence}
+Write $S=\sinh(\alpha/2)$ and $C=\cosh(\alpha/2)$.
+The seam condition is equivalent to
+\[
+ (1-S)\beta=C-1.
+\]
+If $S\ne1$, it selects exactly one coefficient,
+$\beta=(C-1)/(1-S)$, and \eqref{eq:mixed-boundary} has a solution in
+the declared class. If $S=1$, there is no solution in that class.
+In particular, $\alpha=2\operatorname{arsinh}(1)$ is an explicit
+resonant parameter at which existence fails.
+\end{theorem}
+\begin{proof}
+Substitute the explicit formulas into $u_\beta(\tfrac12)=v_\beta(0)$.
+When $S\ne1$, divide by $1-S$ and assemble
+\[
+ x_\beta(t)=
+ \begin{cases}
+ 0,&t\le0,\\
+ u_\beta(t),&0<t\le\tfrac12,\\
+ v_\beta(t-\tfrac12),&\tfrac12<t\le1,\\
+ 1,&t>1.
+ \end{cases}
+\]
+The initial and seam equalities make this path continuous on $[0,1]$.
+On the first open half its delayed value is zero and its advanced
+value is $v_\beta(t)$; on the second, those values are
+$u_\beta(t-\tfrac12)$ and one. The split derivatives therefore give
+\eqref{eq:mixed-boundary} on both open halves.
+
+At $S=1$, the seam equation would require $C=1$, contradicting
+$C^2-S^2=1$. This excludes every solution, not just the explicit
+construction: any solution gives continuous split paths, and
+\Cref{lem:mixed-split} forces their values at the seam to have the
+same form. Finally, $\sinh(\operatorname{arsinh}(1))=1$ supplies the
+stated parameter.
+\leandef{MonadFormal.Temporal.MixedBoundary.path}
+\leanproof{MonadFormal.Temporal.MixedBoundary.join_iff,MonadFormal.Temporal.MixedBoundary.join_unique,MonadFormal.Temporal.MixedBoundary.no_join_at_resonance,MonadFormal.Temporal.MixedBoundary.resonant_parameter,MonadFormal.Temporal.MixedBoundary.no_split_at_resonance,MonadFormal.Temporal.MixedBoundary.path_history,MonadFormal.Temporal.MixedBoundary.path_left,MonadFormal.Temporal.MixedBoundary.path_right,MonadFormal.Temporal.MixedBoundary.path_future,MonadFormal.Temporal.MixedBoundary.path_equation_left,MonadFormal.Temporal.MixedBoundary.path_equation_right,MonadFormal.Temporal.MixedBoundary.path_continuousOn,MonadFormal.Temporal.MixedBoundary.exists_mixed_solution,MonadFormal.Temporal.MixedBoundary.no_mixed_at_resonance,MonadFormal.Temporal.MixedBoundary.solution_exists_iff}
+\end{proof}
+
+\begin{corollary}[Matching the future endpoint is an extra constraint]
+For the joined, non-resonant construction, $v_\beta(\tfrac12)=1$
+if and only if $C=2S$, equivalently $\alpha=\log3$.
+\end{corollary}
+\begin{proof}
+Multiply $v_\beta(\tfrac12)=S+\beta C$ by $1-S$, use the seam
+equation and $C^2-S^2=1$, and obtain
+\[
+ v_\beta(\tfrac12)(1-S)=1+S-C.
+\]
+Since $1-S\ne0$, the desired value is equivalent to $C=2S$.
+Writing the hyperbolic functions as exponentials then gives
+$e^\alpha=3$, equivalently $\alpha=\log3$.
+\leanproof{MonadFormal.Temporal.MixedBoundary.terminal_match_iff,MonadFormal.Temporal.MixedBoundary.terminal_parameter_iff}
+\end{proof}
+
+Thus the solution convention matters. A path in the declared class may
+jump immediately after $1$; requiring a continuous join to the unit
+future imposes the additional endpoint equation. Neither the explicit
+construction nor its resonance obstruction establishes a general
+well-posedness theorem for advanced functional differential equations.

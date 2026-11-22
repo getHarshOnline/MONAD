@@ -1,0 +1,47 @@
+% Lean module: MonadFormal.Influence
+\subsection{A finite model without transitivity}\label{sec:finite-model}
+
+Take $X=\{0,1\}^3$, with identity evolution and coarse-graining,
+noiseless records and preparation $x_0=(0,0,0)$. One trial suffices;
+detection means unequal records. Write $A(a,b,c)=a$, $B(a,b,c)=b$
+and $C(a,b,c)=c$. Admit exactly the identity and the four maps
+\begin{align}
+ U_{A=\alpha}(a,b,c)&=(\alpha,\alpha,0),\label{eq:model-int-a}\\
+ U_{B=\beta}(a,b,c)&=(a,\beta,a\oplus\beta),\label{eq:model-int-b}
+\end{align}
+where $\oplus$ is exclusive or. Interventions set their named event
+on every state, not only on the preparation. In this model the maps
+propagate $b=a$ and $c=a\oplus b$ after setting $A$, but preserve
+$a$ after setting $B$.
+\leandef{MonadFormal.Profile,MonadFormal.Interv,MonadFormal.Influences,MonadFormal.model}
+
+\begin{theorem}[Direct influence need not be transitive]
+\label{thm:influence-nontransitivity}
+In this model, $A\DirectInfluence B$ and $B\DirectInfluence C$, but
+$A\not\DirectInfluence C$.
+\end{theorem}
+\begin{proof}
+The pair $U_{A=1},U_{A=0}$ changes the $B$ record from one to zero.
+The pair $U_{B=1},U_{B=0}$ similarly changes the $C$ record at $x_0$.
+Neither the identity nor either $U_{B=\beta}$ sets $A$ constantly,
+so the only admissible interventions on $A$ are $U_{A=0}$ and
+$U_{A=1}$. Both return $C=0$. Thus no alternative admitted pair
+can witness influence from $A$ to $C$.
+\leanproof{MonadFormal.influences_A_B,MonadFormal.influences_B_C,MonadFormal.interv_A_eq,MonadFormal.not_influences_A_C}
+\end{proof}
+
+\begin{theorem}[Deterministic protocol monotonicity]
+\label{thm:influence-monotonicity}
+For noiseless deterministic profiles with the same preparation, if
+every operation of one profile is admitted by the other, every
+direct influence detected by the former is detected by the latter.
+\end{theorem}
+\begin{proof}
+Reuse the witnessing intervention pair. Both operations remain admitted,
+their event-setting equalities are unchanged, and the same preparation
+gives the same unequal records.
+\leanproof{MonadFormal.influences_mono}
+\end{proof}
+The scope matters: with noisy channels, trial limits or changed
+thresholds, operation-set inclusion alone is insufficient. The full
+protocol contract must preserve the entire detection witness.
